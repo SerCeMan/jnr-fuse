@@ -5,6 +5,7 @@ import jnr.ffi.annotations.Delegate;
 import jnr.ffi.types.off_t;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 public interface FuseFillDir {
     /** Function to add an entry in a readdir() operation
@@ -16,5 +17,11 @@ public interface FuseFillDir {
      * @return 1 if buffer is full, zero otherwise
      */
     @Delegate
-    int fuseFillDir(jnr.ffi.Pointer buf, String name, Pointer stbuf, @off_t int off);
+    int fuseFillDir(jnr.ffi.Pointer buf, ByteBuffer name, Pointer stbuf, @off_t int off);
+
+
+    default int fuseFillDir(jnr.ffi.Pointer buf, String name, Pointer stbuf, @off_t int off) {
+        fuseFillDir(buf, ByteBuffer.wrap(name.getBytes()), stbuf, off);
+        return 0;
+    }
 }
