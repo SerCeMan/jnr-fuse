@@ -12,16 +12,15 @@ public interface FuseFillDir {
      *
      * @param buf the buffer passed to the readdir() operation
      * @param name the file name of the directory entry
-     * @param stat file attributes, can be NULL
+     * @param stbuf file attributes, can be NULL
      * @param off offset of the next entry or zero
      * @return 1 if buffer is full, zero otherwise
      */
     @Delegate
-    int fuseFillDir(jnr.ffi.Pointer buf, ByteBuffer name, Pointer stbuf, @off_t int off);
+    int fuseFillDir(Pointer buf, ByteBuffer name, Pointer stbuf, @off_t int off);
 
 
-    default int fuseFillDir(jnr.ffi.Pointer buf, String name, Pointer stbuf, @off_t int off) {
-        fuseFillDir(buf, ByteBuffer.wrap(name.getBytes()), stbuf, off);
-        return 0;
+    default int apply(Pointer buf, String name, Pointer stbuf, @off_t int off) {
+        return fuseFillDir(buf, ByteBuffer.wrap(name.getBytes()), stbuf, off);
     }
 }
