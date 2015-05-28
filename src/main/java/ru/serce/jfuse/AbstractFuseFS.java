@@ -94,7 +94,7 @@ public abstract class AbstractFuseFS implements FuseFS {
             throw new FuseException("Fuse fs already mounted!");
         }
         this.mountPoint = mountPoint;
-        String[] arg = new String[]{getFSName(), "-f", "-d", mountPoint.toAbsolutePath().toString()};
+        String[] arg = new String[]{getFSName(), "-f", /*"-d",*/ mountPoint.toAbsolutePath().toString()};
         try {
             ForkJoinPool.commonPool().submit(() -> {
                 System.out.println("START");

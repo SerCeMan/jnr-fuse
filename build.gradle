@@ -1,10 +1,20 @@
 apply plugin: 'java'
+apply plugin: 'idea'
 
 repositories {
     mavenCentral()
 }
 
 version = '1.0'
+
+task uberJar(type: Jar) {
+    description = 'Make JAR with all the dependencies included'
+    classifier = 'uber'
+    dependsOn configurations.runtime
+    from sourceSets.main.output
+    from { configurations.runtime.collect { it.directory ? it : zipTree(it) } }
+}
+
 
 dependencies {
     compile 'com.github.jnr:jnr-ffi:2.0.3'
