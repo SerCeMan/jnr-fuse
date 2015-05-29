@@ -1,4 +1,4 @@
-package jnr.ffi.provider.jffi;
+package ru.serce.jnrfuse;
 
 public class FuseException extends RuntimeException {
     public FuseException(String message) {

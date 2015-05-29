@@ -4,7 +4,6 @@ import jnr.ffi.*;
 import jnr.ffi.Runtime;
 import jnr.ffi.mapper.FromNativeConverter;
 import jnr.ffi.provider.jffi.ClosureHelper;
-import jnr.ffi.provider.jffi.FuseException;
 import ru.serce.jnrfuse.struct.FileStat;
 import ru.serce.jnrfuse.struct.Flock;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
