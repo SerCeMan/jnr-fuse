@@ -1,4 +1,4 @@
-package ru.serce.jfuse;
+package ru.serce.jnrfuse;
 
 public class ErrorCodes {
     public static int E2BIG() {

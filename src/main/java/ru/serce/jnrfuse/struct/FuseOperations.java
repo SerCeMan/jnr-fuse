@@ -1,9 +1,9 @@
-package ru.serce.jfuse.struct;
+package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.NativeType;
 import jnr.ffi.Runtime;
 
-import static ru.serce.jfuse.FuseCallbacks.*;
+import static ru.serce.jnrfuse.FuseCallbacks.*;
 
 public class FuseOperations extends FuseStruct {
     public FuseOperations(Runtime runtime) {

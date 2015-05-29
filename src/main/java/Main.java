@@ -1,19 +1,15 @@
 import jnr.ffi.Pointer;
 import jnr.ffi.types.off_t;
 import jnr.ffi.types.size_t;
-import ru.serce.jfuse.ErrorCodes;
-import ru.serce.jfuse.FuseFillDir;
-import ru.serce.jfuse.FuseStubFS;
-import ru.serce.jfuse.struct.FileStat;
-import ru.serce.jfuse.struct.FuseFileInfo;
+import ru.serce.jnrfuse.ErrorCodes;
+import ru.serce.jnrfuse.FuseFillDir;
+import ru.serce.jnrfuse.FuseStubFS;
+import ru.serce.jnrfuse.struct.FileStat;
+import ru.serce.jnrfuse.struct.FuseFileInfo;
 
-import java.io.IOException;
 import java.lang.Runtime;
 import java.nio.file.Paths;
 import java.util.Objects;
-import java.util.Scanner;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
     public static final String HELLO_PATH = "/hello";

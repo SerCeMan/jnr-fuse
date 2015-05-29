@@ -1,4 +1,4 @@
-package ru.serce.jfuse;
+package ru.serce.jnrfuse;
 
 import jnr.ffi.Pointer;
 import jnr.ffi.types.dev_t;
@@ -8,14 +8,13 @@ import jnr.ffi.types.off_t;
 import jnr.ffi.types.size_t;
 import jnr.ffi.types.u_int32_t;
 import jnr.ffi.types.uid_t;
-import ru.serce.jfuse.struct.FileStat;
-import ru.serce.jfuse.struct.Flock;
-import ru.serce.jfuse.struct.FuseFileInfo;
-import ru.serce.jfuse.struct.Statvfs;
-import ru.serce.jfuse.struct.Timespec;
+import ru.serce.jnrfuse.struct.FileStat;
+import ru.serce.jnrfuse.struct.Flock;
+import ru.serce.jnrfuse.struct.FuseFileInfo;
+import ru.serce.jnrfuse.struct.Statvfs;
+import ru.serce.jnrfuse.struct.Timespec;
 
 import java.lang.String;
-import java.nio.ByteBuffer;
 
 /**
  * Fuse file system.

@@ -1,6 +1,5 @@
-package ru.serce.jfuse.struct;
+package ru.serce.jnrfuse.struct;
 
-import jnr.ffi.Pointer;
 import jnr.ffi.Struct;
 
 public class Timespec extends Struct {

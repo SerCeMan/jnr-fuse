@@ -1,10 +1,9 @@
-package ru.serce.jfuse;
+package ru.serce.jnrfuse;
 
 import jnr.ffi.Pointer;
 import jnr.ffi.annotations.Delegate;
 import jnr.ffi.types.off_t;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 public interface FuseFillDir {

@@ -1,16 +1,16 @@
-package ru.serce.jfuse;
+package ru.serce.jnrfuse;
 
 import jnr.ffi.*;
 import jnr.ffi.Runtime;
 import jnr.ffi.mapper.FromNativeConverter;
 import jnr.ffi.provider.jffi.ClosureHelper;
 import jnr.ffi.provider.jffi.FuseException;
-import ru.serce.jfuse.struct.FileStat;
-import ru.serce.jfuse.struct.Flock;
-import ru.serce.jfuse.struct.FuseFileInfo;
-import ru.serce.jfuse.struct.FuseOperations;
-import ru.serce.jfuse.struct.Statvfs;
-import ru.serce.jfuse.struct.Timespec;
+import ru.serce.jnrfuse.struct.FileStat;
+import ru.serce.jnrfuse.struct.Flock;
+import ru.serce.jnrfuse.struct.FuseFileInfo;
+import ru.serce.jnrfuse.struct.FuseOperations;
+import ru.serce.jnrfuse.struct.Statvfs;
+import ru.serce.jnrfuse.struct.Timespec;
 
 import java.io.IOException;
 import java.nio.file.Path;

@@ -1,4 +1,4 @@
-package ru.serce.jfuse;
+package ru.serce.jnrfuse;
 
 import jnr.ffi.Pointer;
 import jnr.ffi.annotations.Delegate;

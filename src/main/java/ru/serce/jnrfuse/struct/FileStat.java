@@ -1,4 +1,4 @@
-package ru.serce.jfuse.struct;
+package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.*;
 import jnr.ffi.Runtime;
