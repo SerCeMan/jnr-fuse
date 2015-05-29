@@ -13,7 +13,7 @@ shadowJar {
     relocate 'org.objectweb.asm', 'org.objectweb.asm.shaded'
 }
 
-version = '1.0'
+version = '0.1'
 
 dependencies {
     compile 'com.github.jnr:jnr-ffi:2.0.3'
