@@ -1,4 +1,5 @@
 import jnr.ffi.Pointer;
+import jnr.ffi.Struct;
 import jnr.ffi.types.off_t;
 import jnr.ffi.types.size_t;
 import ru.serce.jnrfuse.ErrorCodes;
@@ -6,6 +7,7 @@ import ru.serce.jnrfuse.FuseFillDir;
 import ru.serce.jnrfuse.FuseStubFS;
 import ru.serce.jnrfuse.struct.FileStat;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
+import ru.serce.jnrfuse.struct.FuseOperations;
 
 import java.lang.Runtime;
 import java.nio.file.Paths;
@@ -93,8 +95,8 @@ public class Main {
         };
 
         try {
+            System.out.println(Struct.size(new FuseOperations(jnr.ffi.Runtime.getSystemRuntime())));
             stub.mount(Paths.get("/tmp/mnt"));
-            Runtime.getRuntime().addShutdownHook(new Thread(stub::umount));
             Thread.sleep(100000000L);
         } finally {
             stub.umount();

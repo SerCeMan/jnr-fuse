@@ -10,18 +10,26 @@ import ru.serce.jnrfuse.struct.FuseFileInfo;
 import ru.serce.jnrfuse.struct.FuseOperations;
 import ru.serce.jnrfuse.struct.Statvfs;
 import ru.serce.jnrfuse.struct.Timespec;
+import ru.serce.jnrfuse.utils.SecurityUtils;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 /**
  * Created by serce on 27.05.15.
  */
 public abstract class AbstractFuseFS implements FuseFS {
 
+    private static final int TIMEOUT = 2000; // seconds
     private final LibFuse libFuse;
     private final FuseOperations fuseOperations;
     private final AtomicBoolean mounted = new AtomicBoolean();
@@ -88,28 +96,49 @@ public abstract class AbstractFuseFS implements FuseFS {
     }
 
     @Override
-    public void mount(Path mountPoint) {
+    public void mount(Path mountPoint, boolean blocking) {
         if (!mounted.compareAndSet(false, true)) {
             throw new FuseException("Fuse fs already mounted!");
         }
         this.mountPoint = mountPoint;
         String[] arg = new String[]{getFSName(), "-f", /*"-d",*/ mountPoint.toAbsolutePath().toString()};
         try {
-            ForkJoinPool.commonPool().submit(() -> {
-                System.out.println("START");
-                int res = libFuse.fuse_main_real(arg.length, arg, fuseOperations, 360, null);
-                System.out.println("RESULT = " + res);
-                System.out.println("END");
-            });
-        } catch (Throwable t) {
-            throw new FuseException("Unable to mount FS", t);
+            if (!Files.isDirectory(mountPoint)) {
+                throw new FuseException("Mount point should be directory");
+            }
+            if (SecurityUtils.canHandleShutdownHooks()) {
+                java.lang.Runtime.getRuntime().addShutdownHook(new Thread(this::umount));
+            }
+            int res;
+            if (blocking) {
+                res = execMount(arg);
+            } else {
+                try {
+                    res = CompletableFuture
+                            .supplyAsync(() -> execMount(arg))
+                            .get(TIMEOUT, TimeUnit.MILLISECONDS);
+                } catch (TimeoutException e) {
+                    // ok
+                    res = 0;
+                }
+            }
+            if (res != 0) {
+                throw new FuseException("Unable to mount FS, return code = " + res);
+            }
+        } catch (Exception e) {
+            mounted.set(false);
+            throw new FuseException("Unable to mount FS", e);
         }
+    }
+
+    private int execMount(String[] arg) {
+        return libFuse.fuse_main_real(arg.length, arg, fuseOperations, Struct.size(fuseOperations), null);
     }
 
     @Override
     public void umount() {
         if (!mounted.get()) {
-            throw new FuseException("Fuse fs not mounted!");
+            return;
         }
         try {
             new ProcessBuilder("fusermount", "-u", "-z", mountPoint.toAbsolutePath().toString()).start();

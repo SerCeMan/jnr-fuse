@@ -51,10 +51,10 @@ public class FuseOperations extends FuseStruct {
     public final Func<LockCallback> lock = func(LockCallback.class);
     public final Func<UtimensCallback> utimens = func(UtimensCallback.class);
     public final Func<BmapCallback> bmap = func(BmapCallback.class);
-    public final Padding flag_nullpath_ok = new Padding(NativeType.UINT, 1);
-    public final Padding flag_nopath = new Padding(NativeType.UINT, 1);
-    public final Padding flag_utime_omit_ok = new Padding(NativeType.UINT, 1);
-    public final Padding flag_reserved = new Padding(NativeType.UINT, 29);
+    public final Padding flag_nullpath_ok = new Padding(NativeType.UCHAR, 1);
+    public final Padding flag_nopath = new Padding(NativeType.UCHAR, 1);
+    public final Padding flag_utime_omit_ok = new Padding(NativeType.UCHAR, 1);
+    public final Padding flag_reserved = new Padding(NativeType.UCHAR, 1);
     public final Func<IoctlCallback> ioctl = func(IoctlCallback.class);
     public final Func<PollCallback> poll = func(PollCallback.class);
     public final Func<WritebufCallback> write_buf = func(WritebufCallback.class);

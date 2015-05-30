@@ -4,9 +4,15 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.1'
 }
 
-
 repositories {
     mavenCentral()
+}
+
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
 }
 
 shadowJar {
