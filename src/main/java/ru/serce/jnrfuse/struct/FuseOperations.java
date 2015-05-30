@@ -5,6 +5,12 @@ import jnr.ffi.Runtime;
 
 import static ru.serce.jnrfuse.FuseCallbacks.*;
 
+/**
+ * fuse_operations struct
+ *
+ * @author Sergey Tselovalnikov
+ * @since 30.05.15
+ */
 public class FuseOperations extends FuseStruct {
     public FuseOperations(Runtime runtime) {
         super(runtime);
@@ -51,9 +57,38 @@ public class FuseOperations extends FuseStruct {
     public final Func<LockCallback> lock = func(LockCallback.class);
     public final Func<UtimensCallback> utimens = func(UtimensCallback.class);
     public final Func<BmapCallback> bmap = func(BmapCallback.class);
+    /**
+     * Flag indicating that the filesystem can accept a NULL path
+     * as the first argument for the following operations:
+     *
+     * read, write, flush, release, fsync, readdir, releasedir,
+     * fsyncdir, ftruncate, fgetattr, lock, ioctl and poll
+     *
+     * If this flag is set these operations continue to work on
+     * unlinked files even if "-ohard_remove" option was specified.
+     */
     public final Padding flag_nullpath_ok = new Padding(NativeType.UCHAR, 1);
+    /**
+     * Flag indicating that the path need not be calculated for
+     * the following operations:
+     *
+     * read, write, flush, release, fsync, readdir, releasedir,
+     * fsyncdir, ftruncate, fgetattr, lock, ioctl and poll
+     *
+     * Closely related to flag_nullpath_ok, but if this flag is
+     * set then the path will not be calculaged even if the file
+     * wasn't unlinked.  However the path can still be non-NULL if
+     * it needs to be calculated for some other reason.
+     */
     public final Padding flag_nopath = new Padding(NativeType.UCHAR, 1);
+    /**
+     * Flag indicating that the filesystem accepts special
+     * UTIME_NOW and UTIME_OMIT values in its utimens operation.
+     */
     public final Padding flag_utime_omit_ok = new Padding(NativeType.UCHAR, 1);
+    /**
+     * Reserved flags, don't set
+     */
     public final Padding flag_reserved = new Padding(NativeType.UCHAR, 1);
     public final Func<IoctlCallback> ioctl = func(IoctlCallback.class);
     public final Func<PollCallback> poll = func(PollCallback.class);
