@@ -8,6 +8,7 @@ import ru.serce.jnrfuse.FuseStubFS;
 import ru.serce.jnrfuse.struct.FileStat;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
 import ru.serce.jnrfuse.struct.FuseOperations;
+import ru.serce.jnrfuse.struct.Statvfs;
 
 import java.lang.Runtime;
 import java.nio.file.Paths;
@@ -95,7 +96,7 @@ public class Main {
         };
 
         try {
-            System.out.println(Struct.size(new FuseOperations(jnr.ffi.Runtime.getSystemRuntime())));
+            System.out.println(Struct.size(new Statvfs(jnr.ffi.Runtime.getSystemRuntime())));
             stub.mount(Paths.get("/tmp/mnt"));
             Thread.sleep(100000000L);
         } finally {

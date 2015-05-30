@@ -2,8 +2,11 @@ package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.*;
 
-public class FuseStruct extends Struct {
-    protected FuseStruct(jnr.ffi.Runtime runtime) {
+import java.lang.Long;
+import java.lang.Number;
+
+public abstract class BaseStruct extends Struct {
+    protected BaseStruct(jnr.ffi.Runtime runtime) {
         super(runtime);
     }
 
@@ -23,5 +26,14 @@ public class FuseStruct extends Struct {
 
     protected final <T> Func<T> func(Class<T> closureClass) {
         return new Func<>(closureClass);
+    }
+
+    public class fsblkcnt64_t extends UnsignedLong {
+    }
+
+    public class fsfilcnt64_t extends UnsignedLong {
+    }
+
+    public class __time_t extends SignedLong {
     }
 }

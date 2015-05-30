@@ -11,7 +11,7 @@ import static ru.serce.jnrfuse.FuseCallbacks.*;
  * @author Sergey Tselovalnikov
  * @since 30.05.15
  */
-public class FuseOperations extends FuseStruct {
+public class FuseOperations extends BaseStruct {
     public FuseOperations(Runtime runtime) {
         super(runtime);
     }
