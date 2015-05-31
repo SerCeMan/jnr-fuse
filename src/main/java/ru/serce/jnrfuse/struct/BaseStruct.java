@@ -36,4 +36,7 @@ public abstract class BaseStruct extends Struct {
 
     public class __time_t extends SignedLong {
     }
+
+    public class __off64_t extends SignedLong {
+    }
 }

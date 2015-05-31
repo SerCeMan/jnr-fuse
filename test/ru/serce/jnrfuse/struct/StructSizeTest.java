@@ -6,6 +6,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test for right struct size
+ *
+ * @author Sergey Tselovalnikov
+ * @since 31.05.15
+ */
 public class StructSizeTest {
 
     @Test
@@ -43,4 +49,10 @@ public class StructSizeTest {
         }
     }
 
+    @Test
+    public void testFlock() {
+        if (Platform.IS_64_BIT) {
+            assertEquals(32, Struct.size(new Flock(jnr.ffi.Runtime.getSystemRuntime())));
+        }
+    }
 }

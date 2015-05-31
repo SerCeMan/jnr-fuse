@@ -1,8 +1,14 @@
 package ru.serce.jnrfuse.struct;
 
-import jnr.ffi.*;
 import jnr.ffi.Runtime;
+import jnr.ffi.Struct;
 
+/**
+ * stat data structure
+ *
+ * @author Sergey Tselovalnikov
+ * @since 31.05.15
+ */
 public class FileStat extends Struct {
     public static final int S_IFIFO = 0010000;  // named pipe (fifo)
     public static final int S_IFCHR = 0020000;  // character special
@@ -29,20 +35,20 @@ public class FileStat extends Struct {
     public static final int ALL_WRITE = S_IWUSR | S_IWGRP | S_IWOTH;
     public static final int S_IXUGO = S_IXUSR | S_IXGRP | S_IXOTH;
 
-    public FileStat(jnr.ffi.Runtime runtime) {
+    public FileStat(Runtime runtime) {
         super(runtime);
     }
 
-    public final Signed64 st_dev = new Signed64();
-    public final Signed64 st_ino = new Signed64();
-    public final Signed64 st_nlink = new Signed64();
-    public final Signed32 st_mode = new Signed32();
-    public final Signed32 st_uid = new Signed32();
-    public final Signed32 st_gid = new Signed32();
-    public final Signed64 st_rdev = new Signed64();
-    public final Signed64 st_size = new Signed64();
-    public final Signed64 st_blksize = new Signed64();
-    public final Signed64 st_blocks = new Signed64();
+    public final Signed64 st_dev = new Signed64();      /* Device.  */
+    public final Signed64 st_ino = new Signed64();      /* File serial number.	*/
+    public final Signed64 st_nlink = new Signed64();    /* Link count.  */
+    public final Signed32 st_mode = new Signed32();     /* File mode.  */
+    public final Signed32 st_uid = new Signed32();      /* User ID of the file's owner.	*/
+    public final Signed32 st_gid = new Signed32();      /* Group ID of the file's group.*/
+    public final Signed64 st_rdev = new Signed64();     /* Device number, if device.  */
+    public final Signed64 st_size = new Signed64();     /* Size of file, in bytes.  */
+    public final Signed64 st_blksize = new Signed64();  /* Optimal block size for I/O.  */
+    public final Signed64 st_blocks = new Signed64();   /* Number 512-byte blocks allocated. */
     public final Signed64 st_atime = new Signed64();     // Time of last access (time_t)
     public final Signed64 st_atimensec = new Signed64(); // Time of last access (nanoseconds)
     public final Signed64 st_mtime = new Signed64();     // Last data modification time (time_t)

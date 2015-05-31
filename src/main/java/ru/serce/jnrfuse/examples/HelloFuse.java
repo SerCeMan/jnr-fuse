@@ -1,3 +1,5 @@
+package ru.serce.jnrfuse.examples;
+
 import jnr.ffi.Pointer;
 import jnr.ffi.Struct;
 import jnr.ffi.types.off_t;
@@ -14,7 +16,13 @@ import java.lang.Runtime;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-public class Main {
+/**
+ * @see <a href="http://fuse.sourceforge.net/helloworld.html">helloworld</a>
+ *
+ * @author Sergey Tselovalnikov
+ * @since 31.05.15
+ */
+public class HelloFuse {
     public static final String HELLO_PATH = "/hello";
     public static final String HELLO_STR = "Hello World!";
 
@@ -26,10 +34,10 @@ public class Main {
                 System.out.println("GETATTR");
                 int res = 0;
                 if (Objects.equals(path, "/")) {
-                    stat.st_mode.set(jnr.posix.FileStat.S_IFDIR | 0755);
+                    stat.st_mode.set(FileStat.S_IFDIR | 0755);
                     stat.st_nlink.set(2);
                 } else if ("/hello".equals(path)) {
-                    stat.st_mode.set(jnr.posix.FileStat.S_IFREG | 0444);
+                    stat.st_mode.set(FileStat.S_IFREG | 0444);
                     stat.st_nlink.set(1);
                     stat.st_size.set(HELLO_STR.getBytes().length);
                     stat.st_atime.set(System.currentTimeMillis());
@@ -96,9 +104,7 @@ public class Main {
         };
 
         try {
-            System.out.println(Struct.size(new Statvfs(jnr.ffi.Runtime.getSystemRuntime())));
-            stub.mount(Paths.get("/tmp/mnt"));
-            Thread.sleep(100000000L);
+            stub.mount(Paths.get("/tmp/mnt"), true);
         } finally {
             stub.umount();
         }
