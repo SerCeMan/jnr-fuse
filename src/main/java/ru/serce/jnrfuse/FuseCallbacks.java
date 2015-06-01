@@ -121,7 +121,7 @@ public final class FuseCallbacks {
 
     public interface ListxattrCallback {
         @Delegate
-        int listxattr(String path, String list, @size_t long size);
+        int listxattr(String path, Pointer list, @size_t long size);
     }
 
     public interface RemovexattrCallback {
@@ -193,7 +193,6 @@ public final class FuseCallbacks {
         @Delegate
         void bmap(String path, @size_t long blocksize, Pointer idx);
     }
-
 
     public interface IoctlCallback {
         @Delegate

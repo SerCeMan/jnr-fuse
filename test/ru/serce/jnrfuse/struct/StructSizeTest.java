@@ -2,6 +2,7 @@ package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.*;
 import jnr.posix.util.Platform;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -53,6 +54,28 @@ public class StructSizeTest {
     public void testFlock() {
         if (Platform.IS_64_BIT) {
             assertEquals(32, Struct.size(new Flock(jnr.ffi.Runtime.getSystemRuntime())));
+        }
+    }
+
+    @Test
+    public void testFuseBuf() {
+        if (Platform.IS_64_BIT) {
+            assertEquals(40, Struct.size(new FuseBuf(jnr.ffi.Runtime.getSystemRuntime())));
+        }
+    }
+
+    @Test
+    @Ignore
+    public void testFuseBufvec() {
+        if (Platform.IS_64_BIT) {
+            assertEquals(64, Struct.size(new FuseBufvec(jnr.ffi.Runtime.getSystemRuntime())));
+        }
+    }
+
+    @Test
+    public void testFusePollhandle() {
+        if (Platform.IS_64_BIT) {
+            assertEquals(24, Struct.size(new FusePollhandle(jnr.ffi.Runtime.getSystemRuntime())));
         }
     }
 }

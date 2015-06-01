@@ -10,7 +10,9 @@ import jnr.ffi.types.u_int32_t;
 import jnr.ffi.types.uid_t;
 import ru.serce.jnrfuse.struct.FileStat;
 import ru.serce.jnrfuse.struct.Flock;
+import ru.serce.jnrfuse.struct.FuseBufvec;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
+import ru.serce.jnrfuse.struct.FusePollhandle;
 import ru.serce.jnrfuse.struct.Statvfs;
 import ru.serce.jnrfuse.struct.Timespec;
 
@@ -121,7 +123,7 @@ public class FuseStubFS extends AbstractFuseFS {
     }
 
     @Override
-    public int listxattr(String path, String list, @size_t long size) {
+    public int listxattr(String path, Pointer list, @size_t long size) {
         return 0;
     }
 
@@ -201,17 +203,17 @@ public class FuseStubFS extends AbstractFuseFS {
     }
 
     @Override
-    public int poll(String path, FuseFileInfo fi, Pointer ph, Pointer reventsp) {
+    public int poll(String path, FuseFileInfo fi, FusePollhandle ph, Pointer reventsp) {
         return 0;
     }
 
     @Override
-    public int write_buf(String path, Pointer buf, @off_t long off, FuseFileInfo fi) {
+    public int write_buf(String path, FuseBufvec buf, @off_t long off, FuseFileInfo fi) {
         return 0;
     }
 
     @Override
-    public int read_buf(String path, Pointer bufp, @size_t long size, @off_t long off, FuseFileInfo fi) {
+    public int read_buf(String path, FuseBufvec bufp, @size_t long size, @off_t long off, FuseFileInfo fi) {
         return 0;
     }
 

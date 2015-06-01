@@ -6,8 +6,10 @@ import jnr.ffi.mapper.FromNativeConverter;
 import jnr.ffi.provider.jffi.ClosureHelper;
 import ru.serce.jnrfuse.struct.FileStat;
 import ru.serce.jnrfuse.struct.Flock;
+import ru.serce.jnrfuse.struct.FuseBufvec;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
 import ru.serce.jnrfuse.struct.FuseOperations;
+import ru.serce.jnrfuse.struct.FusePollhandle;
 import ru.serce.jnrfuse.struct.Statvfs;
 import ru.serce.jnrfuse.struct.Timespec;
 import ru.serce.jnrfuse.utils.SecurityUtils;
@@ -85,12 +87,16 @@ public abstract class AbstractFuseFS implements FuseFS {
         fuseOperations.ftruncate.set((path, size, fi) -> fuse.ftruncate(path, size, FuseFileInfo.of(fi)));
         fuseOperations.fgetattr.set((path, stbuf, fi) -> fuse.fgetattr(path, FileStat.of(stbuf), FuseFileInfo.of(fi)));
         fuseOperations.lock.set((path, fi, cmd, flock) -> fuse.lock(path, FuseFileInfo.of(fi), cmd, Flock.of(flock)));
-        fuseOperations.utimens.set((path, timespec) -> fuse.utimens(path, new Timespec[]{Timespec.of(timespec), Timespec.of(timespec.getPointer(8))}));
+        fuseOperations.utimens.set((path, timespec) -> {
+            Timespec timespec1 = Timespec.of(timespec);
+            Timespec timespec2 = Timespec.of(timespec.getPointer(Struct.size(timespec1)));
+            fuse.utimens(path, new Timespec[] { timespec1, timespec2 });
+        });
         fuseOperations.bmap.set((path, blocksize, idx) -> fuse.bmap(path, blocksize, idx.getLong(0)));
         fuseOperations.ioctl.set((path, cmd, arg, fi, flags, data) -> fuse.ioctl(path, cmd, arg, FuseFileInfo.of(fi), flags, data));
-        fuseOperations.poll.set((path, fi, ph, reventsp) -> fuse.poll(path, FuseFileInfo.of(fi), ph, reventsp));
-        fuseOperations.write_buf.set((path, buf, off, fi) -> fuse.write_buf(path, buf, off, FuseFileInfo.of(fi)));
-        fuseOperations.read_buf.set((path, bufp, size, off, fi) -> fuse.read_buf(path, bufp, size, off, FuseFileInfo.of(fi)));
+        fuseOperations.poll.set((path, fi, ph, reventsp) -> fuse.poll(path, FuseFileInfo.of(fi), FusePollhandle.of(ph), reventsp));
+        fuseOperations.write_buf.set((path, buf, off, fi) -> fuse.write_buf(path, FuseBufvec.of(buf), off, FuseFileInfo.of(fi)));
+        fuseOperations.read_buf.set((path, bufp, size, off, fi) -> fuse.read_buf(path, FuseBufvec.of(bufp), size, off, FuseFileInfo.of(fi)));
         fuseOperations.flock.set((path, fi, op) -> fuse.flock(path, FuseFileInfo.of(fi), op));
         fuseOperations.fallocate.set((path, mode, off, length, fi) -> fuse.fallocate(path, mode, off, length, FuseFileInfo.of(fi)));
     }

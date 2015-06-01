@@ -10,7 +10,9 @@ import jnr.ffi.types.u_int32_t;
 import jnr.ffi.types.uid_t;
 import ru.serce.jnrfuse.struct.FileStat;
 import ru.serce.jnrfuse.struct.Flock;
+import ru.serce.jnrfuse.struct.FuseBufvec;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
+import ru.serce.jnrfuse.struct.FusePollhandle;
 import ru.serce.jnrfuse.struct.Statvfs;
 import ru.serce.jnrfuse.struct.Timespec;
 
@@ -190,8 +192,16 @@ public interface FuseFS extends Mountable {
     /** Get extended attributes */
     int getxattr(String path, String name, Pointer value, @size_t long size);
 
-    /** List extended attributes */
-    int listxattr(String path, String list, @size_t long size);
+    /** List extended attributes
+     *
+     * The retrieved list is placed
+     * in list, a caller-allocated buffer whose size (in bytes) is specified
+     * in the argument size.  The list is the set of (null-terminated)
+     * names, one after the other.  Names of extended attributes to which
+     * the calling process does not have access may be omitted from the
+     * list. The length of the attribute name list is returned
+     */
+    int listxattr(String path, Pointer list, @size_t long size);
 
     /** Remove extended attributes */
     int removexattr(String path, String name);
@@ -378,8 +388,10 @@ public interface FuseFS extends Mountable {
      *
      * The callee is responsible for destroying ph with
      * fuse_pollhandle_destroy() when no longer in use.
+     *
+     * @param reventsp A pointer to a bitmask of  the  returned  events satisfied.
      */
-    int poll(String path, FuseFileInfo fi, Pointer ph, Pointer reventsp);
+    int poll(String path, FuseFileInfo fi, FusePollhandle ph, Pointer reventsp);
 
     /** Write contents of buffer to an open file
      *
@@ -387,8 +399,7 @@ public interface FuseFS extends Mountable {
      * generic buffer.  Use fuse_buf_copy() to transfer data to
      * the destination.
      */
-    // TODO buf
-    int write_buf(String path, Pointer buf, @off_t long off, FuseFileInfo fi);
+    int write_buf(String path, FuseBufvec buf, @off_t long off, FuseFileInfo fi);
 
     /** Store data from an open file in a buffer
      *
@@ -404,8 +415,7 @@ public interface FuseFS extends Mountable {
      * regions, they too must be allocated using malloc().  The
      * allocated memory will be freed by the caller.
      */
-    // TODO fuse_bufvec
-    int read_buf(String path, Pointer bufp, @size_t long size, @off_t long off, FuseFileInfo fi);
+    int read_buf(String path, FuseBufvec bufp, @size_t long size, @off_t long off, FuseFileInfo fi);
 
     /**
      * Perform BSD file locking operation

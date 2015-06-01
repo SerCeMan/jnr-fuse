@@ -39,4 +39,6 @@ public abstract class BaseStruct extends Struct {
 
     public class __off64_t extends SignedLong {
     }
+
+
 }
