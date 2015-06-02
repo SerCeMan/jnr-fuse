@@ -1,5 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
+import jnr.ffi.BaseStruct;
+
 /**
  * Information about a mounted file system
  *

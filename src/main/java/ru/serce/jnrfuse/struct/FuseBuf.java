@@ -1,5 +1,8 @@
 package ru.serce.jnrfuse.struct;
 
+
+import jnr.ffi.BaseStruct;
+
 /**
  * Single data buffer
  * <p>

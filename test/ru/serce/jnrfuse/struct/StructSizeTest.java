@@ -1,6 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.*;
+import jnr.ffi.Runtime;
 import jnr.posix.util.Platform;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -65,7 +66,6 @@ public class StructSizeTest {
     }
 
     @Test
-    @Ignore
     public void testFuseBufvec() {
         if (Platform.IS_64_BIT) {
             assertEquals(64, Struct.size(new FuseBufvec(jnr.ffi.Runtime.getSystemRuntime())));

@@ -1,6 +1,9 @@
 package ru.serce.jnrfuse.struct;
 
 
+import jnr.ffi.*;
+import jnr.ffi.Runtime;
+
 /**
  * Data buffer vector
  * <p>
@@ -30,13 +33,12 @@ public class FuseBufvec extends BaseStruct {
     /**
      * Current offset within the current buffer
      */
-    public size_t off = new size_t();
+    public final size_t off = new size_t();
 
     /**
      * Array of buffers
      */
-    // TODO inline and count for right size
-    public FuseBuf buf = FuseBuf.of(new Pointer().getMemory());
+    public final FuseBuf buf = inner(new FuseBuf(getRuntime()));
 
     public static FuseBufvec of(jnr.ffi.Pointer pointer) {
         FuseBufvec buf = new FuseBufvec(jnr.ffi.Runtime.getSystemRuntime());

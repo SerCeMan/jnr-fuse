@@ -1,9 +1,4 @@
-package ru.serce.jnrfuse.struct;
-
-import jnr.ffi.*;
-
-import java.lang.Long;
-import java.lang.Number;
+package jnr.ffi;
 
 public abstract class BaseStruct extends Struct {
     protected BaseStruct(jnr.ffi.Runtime runtime) {
@@ -39,6 +34,7 @@ public abstract class BaseStruct extends Struct {
 
     public class __off64_t extends SignedLong {
     }
+
 
 
 }

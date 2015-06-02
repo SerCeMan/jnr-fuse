@@ -1,6 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.NativeType;
+import jnr.ffi.BaseStruct;
 import jnr.posix.util.Platform;
 
 /**

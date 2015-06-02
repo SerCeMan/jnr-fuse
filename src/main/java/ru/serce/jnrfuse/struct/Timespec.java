@@ -1,5 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
+import jnr.ffi.BaseStruct;
+
 /**
  * POSIX.1b structure for a time value.
  *
