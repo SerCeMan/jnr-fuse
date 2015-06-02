@@ -1,6 +1,6 @@
 package ru.serce.jnrfuse.utils;
 
-public class SecurityUtils {
+public final class SecurityUtils {
     public static boolean canHandleShutdownHooks() {
         SecurityManager security = System.getSecurityManager();
         if (security == null) {
@@ -12,5 +12,8 @@ public class SecurityUtils {
         } catch (final SecurityException e) {
             return false;
         }
+    }
+
+    private SecurityUtils() {
     }
 }
