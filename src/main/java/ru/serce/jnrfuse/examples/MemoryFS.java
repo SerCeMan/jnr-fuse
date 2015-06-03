@@ -109,7 +109,7 @@ public class MemoryFS extends FuseStubFS {
 
         @Override
         protected void getattr(FileStat stat) {
-            stat.st_mode.set(FileStat.S_IFREG);
+            stat.st_mode.set(FileStat.S_IFREG | 0777);
             stat.st_size.set(contents.capacity());
         }
 
@@ -198,7 +198,7 @@ public class MemoryFS extends FuseStubFS {
     public static void main(String[] args) {
         MemoryFS memfs = new MemoryFS();
         try {
-            memfs.mount(Paths.get("/tmp/mnt"), true);
+            memfs.mount(Paths.get("/tmp/mnt"), true, true);
         } finally {
             memfs.umount();
         }

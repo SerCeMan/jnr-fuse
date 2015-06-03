@@ -1,6 +1,8 @@
 package ru.serce.jnrfuse;
 
-import jnr.ffi.Pointer;
+import com.kenai.jffi.MemoryIO;
+import jnr.ffi.*;
+import jnr.ffi.Runtime;
 import jnr.ffi.types.dev_t;
 import jnr.ffi.types.gid_t;
 import jnr.ffi.types.mode_t;
@@ -213,8 +215,28 @@ public class FuseStubFS extends AbstractFuseFS {
     }
 
     @Override
-    public int read_buf(String path, FuseBufvec bufp, @size_t long size, @off_t long off, FuseFileInfo fi) {
-        return 0;
+    public int read_buf(String path, Pointer bufp, @size_t long size, @off_t long off, FuseFileInfo fi) {
+        // should be implemented or null
+        // System.err.println("READ BUF IS NOT IMPLEMENTED!\n THIS CAN BE A CAUSE OF SIGSEGV");
+        long vecmem = MemoryIO.getInstance().allocateMemory(Struct.size(new FuseBufvec(Runtime.getSystemRuntime())), false);
+        if(vecmem == 0) {
+            return -ErrorCodes.ENOMEM();
+        }
+        Pointer src = Pointer.wrap(Runtime.getSystemRuntime(), vecmem);
+        long memAdr = MemoryIO.getInstance().allocateMemory(size, false);
+        if(memAdr == 0) {
+            MemoryIO.getInstance().freeMemory(vecmem);
+            return -ErrorCodes.ENOMEM();
+        }
+        Pointer mem = Pointer.wrap(Runtime.getSystemRuntime(), memAdr);
+        FuseBufvec buf = FuseBufvec.of(src);
+        FuseBufvec.init(buf, size);
+        buf.buf.mem.set(mem);
+        bufp.putAddress(0, src.address());
+        int res = read(path, mem, size, off, fi);
+        if(res >= 0)
+            buf.buf.size.set(res);
+        return res;
     }
 
     @Override

@@ -16,7 +16,7 @@ import jnr.ffi.Runtime;
  * @since 02.06.15
  */
 public class FuseBufvec extends BaseStruct {
-    protected FuseBufvec(jnr.ffi.Runtime runtime) {
+    public FuseBufvec(jnr.ffi.Runtime runtime) {
         super(runtime);
     }
 
@@ -46,4 +46,17 @@ public class FuseBufvec extends BaseStruct {
         return buf;
     }
 
+    /**
+     * Similar to FUSE_BUFVEC_INIT macros
+     */
+    public static void init(FuseBufvec buf, long size) {
+        buf.count.set(1);
+        buf.idx.set(0);
+        buf.off.set(0);
+        buf.buf.size.set(size);
+        buf.buf.flags.set(0);
+        buf.buf.mem.set(0);
+        buf.buf.fd.set(-1);
+        buf.buf.pos.set(0);
+    }
 }

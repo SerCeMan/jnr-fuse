@@ -90,24 +90,29 @@ public abstract class AbstractFuseFS implements FuseFS {
         fuseOperations.utimens.set((path, timespec) -> {
             Timespec timespec1 = Timespec.of(timespec);
             Timespec timespec2 = Timespec.of(timespec.getPointer(Struct.size(timespec1)));
-            fuse.utimens(path, new Timespec[] { timespec1, timespec2 });
+            fuse.utimens(path, new Timespec[]{timespec1, timespec2});
         });
         fuseOperations.bmap.set((path, blocksize, idx) -> fuse.bmap(path, blocksize, idx.getLong(0)));
         fuseOperations.ioctl.set((path, cmd, arg, fi, flags, data) -> fuse.ioctl(path, cmd, arg, FuseFileInfo.of(fi), flags, data));
         fuseOperations.poll.set((path, fi, ph, reventsp) -> fuse.poll(path, FuseFileInfo.of(fi), FusePollhandle.of(ph), reventsp));
         fuseOperations.write_buf.set((path, buf, off, fi) -> fuse.write_buf(path, FuseBufvec.of(buf), off, FuseFileInfo.of(fi)));
-        fuseOperations.read_buf.set((path, bufp, size, off, fi) -> fuse.read_buf(path, FuseBufvec.of(bufp), size, off, FuseFileInfo.of(fi)));
+        fuseOperations.read_buf.set((path, bufp, size, off, fi) -> fuse.read_buf(path, bufp, size, off, FuseFileInfo.of(fi)));
         fuseOperations.flock.set((path, fi, op) -> fuse.flock(path, FuseFileInfo.of(fi), op));
         fuseOperations.fallocate.set((path, mode, off, length, fi) -> fuse.fallocate(path, mode, off, length, FuseFileInfo.of(fi)));
     }
 
     @Override
-    public void mount(Path mountPoint, boolean blocking) {
+    public void mount(Path mountPoint, boolean blocking, boolean debug) {
         if (!mounted.compareAndSet(false, true)) {
             throw new FuseException("Fuse fs already mounted!");
         }
         this.mountPoint = mountPoint;
-        String[] arg = new String[]{getFSName(), "-f", /*"-d",*/ mountPoint.toAbsolutePath().toString()};
+        String[] arg;
+        if (!debug) {
+            arg = new String[]{getFSName(), "-f", mountPoint.toAbsolutePath().toString()};
+        } else {
+            arg = new String[]{getFSName(), "-f", "-d", mountPoint.toAbsolutePath().toString()};
+        }
         try {
             if (!Files.isDirectory(mountPoint)) {
                 throw new FuseException("Mount point should be directory");

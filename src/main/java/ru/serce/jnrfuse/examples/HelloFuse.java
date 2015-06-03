@@ -1,7 +1,6 @@
 package ru.serce.jnrfuse.examples;
 
 import jnr.ffi.Pointer;
-import jnr.ffi.Struct;
 import jnr.ffi.types.off_t;
 import jnr.ffi.types.size_t;
 import ru.serce.jnrfuse.ErrorCodes;
@@ -9,10 +8,7 @@ import ru.serce.jnrfuse.FuseFillDir;
 import ru.serce.jnrfuse.FuseStubFS;
 import ru.serce.jnrfuse.struct.FileStat;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
-import ru.serce.jnrfuse.struct.FuseOperations;
-import ru.serce.jnrfuse.struct.Statvfs;
 
-import java.lang.Runtime;
 import java.nio.file.Paths;
 import java.util.Objects;
 

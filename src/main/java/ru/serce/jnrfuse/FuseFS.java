@@ -415,7 +415,7 @@ public interface FuseFS extends Mountable {
      * regions, they too must be allocated using malloc().  The
      * allocated memory will be freed by the caller.
      */
-    int read_buf(String path, FuseBufvec bufp, @size_t long size, @off_t long off, FuseFileInfo fi);
+    int read_buf(String path, Pointer bufp, @size_t long size, @off_t long off, FuseFileInfo fi);
 
     /**
      * Perform BSD file locking operation
