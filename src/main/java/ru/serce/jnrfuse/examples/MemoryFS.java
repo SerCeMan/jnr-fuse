@@ -143,7 +143,11 @@ public class MemoryFS extends FuseStubFS {
             synchronized (this) {
                 if (maxWriteIndex > contents.capacity()) {
                     // Need to create a new, larger buffer
-                    ByteBuffer newContents = ByteBuffer.allocate(maxWriteIndex);
+                    long newSize = Math.max(contents.capacity(), 1);
+                    while (newSize < maxWriteIndex) {
+                        newSize = Math.min(Integer.MAX_VALUE, 2L * newSize);
+                    }
+                    ByteBuffer newContents = ByteBuffer.allocate((int) newSize);
                     newContents.put(contents);
                     contents = newContents;
                 }
