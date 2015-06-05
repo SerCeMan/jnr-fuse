@@ -35,6 +35,34 @@ public class FileStat extends Struct {
     public static final int ALL_WRITE = S_IWUSR | S_IWGRP | S_IWOTH;
     public static final int S_IXUGO = S_IXUSR | S_IXGRP | S_IXOTH;
 
+    public static boolean S_ISTYPE(int mode, int mask) {
+        return (mode & S_IFMT) == mask;
+    }
+
+    public static boolean S_ISDIR(int mode) {
+        return S_ISTYPE(mode, S_IFDIR);
+    }
+
+    public static boolean S_ISCHR(int mode) {
+        return S_ISTYPE(mode, S_IFCHR);
+    }
+
+    public static boolean S_ISBLK(int mode) {
+        return S_ISTYPE(mode, S_IFBLK);
+    }
+
+    public static boolean S_ISREG(int mode) {
+        return S_ISTYPE(mode, S_IFREG);
+    }
+
+    public static boolean S_ISFIFO(int mode) {
+        return S_ISTYPE(mode, S_IFIFO);
+    }
+
+    public static boolean S_ISLNK(int mode) {
+        return S_ISTYPE(mode, S_IFLNK);
+    }
+
     public FileStat(Runtime runtime) {
         super(runtime);
     }

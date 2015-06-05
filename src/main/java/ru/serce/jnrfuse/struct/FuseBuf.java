@@ -2,6 +2,7 @@ package ru.serce.jnrfuse.struct;
 
 
 import jnr.ffi.BaseStruct;
+import ru.serce.jnrfuse.flags.FuseBufFlags;
 
 /**
  * Single data buffer

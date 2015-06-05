@@ -32,10 +32,10 @@ import java.util.function.Supplier;
 public abstract class AbstractFuseFS implements FuseFS {
 
     private static final int TIMEOUT = 2000; // seconds
-    private final LibFuse libFuse;
-    private final FuseOperations fuseOperations;
-    private final AtomicBoolean mounted = new AtomicBoolean();
-    private Path mountPoint;
+    protected final LibFuse libFuse;
+    protected final FuseOperations fuseOperations;
+    protected final AtomicBoolean mounted = new AtomicBoolean();
+    protected Path mountPoint;
 
     public AbstractFuseFS() {
         LibraryLoader<LibFuse> loader = LibraryLoader.create(LibFuse.class);
@@ -95,8 +95,10 @@ public abstract class AbstractFuseFS implements FuseFS {
         fuseOperations.bmap.set((path, blocksize, idx) -> fuse.bmap(path, blocksize, idx.getLong(0)));
         fuseOperations.ioctl.set((path, cmd, arg, fi, flags, data) -> fuse.ioctl(path, cmd, arg, FuseFileInfo.of(fi), flags, data));
         fuseOperations.poll.set((path, fi, ph, reventsp) -> fuse.poll(path, FuseFileInfo.of(fi), FusePollhandle.of(ph), reventsp));
-        fuseOperations.write_buf.set((path, buf, off, fi) -> fuse.write_buf(path, FuseBufvec.of(buf), off, FuseFileInfo.of(fi)));
-        fuseOperations.read_buf.set((path, bufp, size, off, fi) -> fuse.read_buf(path, bufp, size, off, FuseFileInfo.of(fi)));
+        if(isBufOperationsImplemented()) {
+            fuseOperations.write_buf.set((path, buf, off, fi) -> fuse.write_buf(path, FuseBufvec.of(buf), off, FuseFileInfo.of(fi)));
+            fuseOperations.read_buf.set((path, bufp, size, off, fi) -> fuse.read_buf(path, bufp, size, off, FuseFileInfo.of(fi)));
+        }
         fuseOperations.flock.set((path, fi, op) -> fuse.flock(path, FuseFileInfo.of(fi), op));
         fuseOperations.fallocate.set((path, mode, off, length, fi) -> fuse.fallocate(path, mode, off, length, FuseFileInfo.of(fi)));
     }
@@ -157,6 +159,10 @@ public abstract class AbstractFuseFS implements FuseFS {
         } catch (IOException e) {
             throw new FuseException("Unable to umount FS", e);
         }
+    }
+
+    protected boolean isBufOperationsImplemented() {
+        return false;
     }
 
     protected String getFSName() {

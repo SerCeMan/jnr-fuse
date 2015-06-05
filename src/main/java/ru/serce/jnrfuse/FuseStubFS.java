@@ -12,6 +12,8 @@ import jnr.ffi.types.u_int32_t;
 import jnr.ffi.types.uid_t;
 import ru.serce.jnrfuse.struct.FileStat;
 import ru.serce.jnrfuse.struct.Flock;
+import ru.serce.jnrfuse.struct.FuseBuf;
+import ru.serce.jnrfuse.flags.FuseBufFlags;
 import ru.serce.jnrfuse.struct.FuseBufvec;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
 import ru.serce.jnrfuse.struct.FusePollhandle;
@@ -211,20 +213,53 @@ public class FuseStubFS extends AbstractFuseFS {
 
     @Override
     public int write_buf(String path, FuseBufvec buf, @off_t long off, FuseFileInfo fi) {
-        return 0;
+        // TODO.
+        // Some problem in implementation, but it not enabling by default
+        int res = 0;
+        int size = (int) libFuse.fuse_buf_size(buf);
+        FuseBuf flatbuf;
+        FuseBufvec tmp = new FuseBufvec(Runtime.getSystemRuntime());
+        long adr = MemoryIO.getInstance().allocateMemory(Struct.size(tmp), false);
+        tmp.useMemory(Pointer.wrap(Runtime.getSystemRuntime(), adr));
+        FuseBufvec.init(tmp, size);
+        long mem = 0;
+        if (buf.count.get() == 1 && buf.buf.flags.get() == FuseBufFlags.FUSE_BUF_IS_FD) {
+            flatbuf = buf.buf;
+        } else {
+            res = -ErrorCodes.ENOMEM();
+            mem = MemoryIO.getInstance().allocateMemory(size, false);
+            if (mem == 0) {
+                MemoryIO.getInstance().freeMemory(adr);
+                return res;
+            }
+            tmp.buf.mem.set(mem);
+            res = (int) libFuse.fuse_buf_copy(tmp, buf, 0);
+            if (res <= 0) {
+                MemoryIO.getInstance().freeMemory(adr);
+                MemoryIO.getInstance().freeMemory(mem);
+                return res;
+            }
+            tmp.buf.size.set(res);
+            flatbuf = tmp.buf;
+        }
+        res = write(path, flatbuf.mem.get(), flatbuf.size.get(), off, fi);
+        if (mem != 0) {
+            MemoryIO.getInstance().freeMemory(adr);
+            MemoryIO.getInstance().freeMemory(mem);
+        }
+        return res;
     }
 
     @Override
     public int read_buf(String path, Pointer bufp, @size_t long size, @off_t long off, FuseFileInfo fi) {
         // should be implemented or null
-        // System.err.println("READ BUF IS NOT IMPLEMENTED!\n THIS CAN BE A CAUSE OF SIGSEGV");
         long vecmem = MemoryIO.getInstance().allocateMemory(Struct.size(new FuseBufvec(Runtime.getSystemRuntime())), false);
-        if(vecmem == 0) {
+        if (vecmem == 0) {
             return -ErrorCodes.ENOMEM();
         }
         Pointer src = Pointer.wrap(Runtime.getSystemRuntime(), vecmem);
         long memAdr = MemoryIO.getInstance().allocateMemory(size, false);
-        if(memAdr == 0) {
+        if (memAdr == 0) {
             MemoryIO.getInstance().freeMemory(vecmem);
             return -ErrorCodes.ENOMEM();
         }
@@ -234,7 +269,7 @@ public class FuseStubFS extends AbstractFuseFS {
         buf.buf.mem.set(mem);
         bufp.putAddress(0, src.address());
         int res = read(path, mem, size, off, fi);
-        if(res >= 0)
+        if (res >= 0)
             buf.buf.size.set(res);
         return res;
     }
@@ -246,6 +281,6 @@ public class FuseStubFS extends AbstractFuseFS {
 
     @Override
     public int fallocate(String path, int mode, @off_t long off, @off_t long length, FuseFileInfo fi) {
-        return 0;
+        return -ErrorCodes.ENOSYS();
     }
 }

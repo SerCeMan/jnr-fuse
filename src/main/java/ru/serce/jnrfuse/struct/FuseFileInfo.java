@@ -16,6 +16,8 @@ public class FuseFileInfo extends Struct {
 
     /**
      * Open flags.	 Available in open() and release()
+     *
+     * @see jnr.constants.platform.OpenFlags
      */
     public final Signed32 flags = new Signed32();
     /**
