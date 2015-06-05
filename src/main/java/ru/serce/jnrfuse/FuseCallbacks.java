@@ -10,8 +10,6 @@ import jnr.ffi.types.size_t;
 import jnr.ffi.types.u_int32_t;
 import jnr.ffi.types.uid_t;
 
-import java.lang.String;
-
 public final class FuseCallbacks {
 
     public interface GetAttrCallback {

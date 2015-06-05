@@ -9,6 +9,7 @@ import ru.serce.jnrfuse.ErrorCodes;
 import ru.serce.jnrfuse.FuseFillDir;
 import ru.serce.jnrfuse.FuseStubFS;
 import ru.serce.jnrfuse.struct.FileStat;
+import ru.serce.jnrfuse.struct.FuseBufvec;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
 
 import java.io.UnsupportedEncodingException;
@@ -220,11 +221,6 @@ public class MemoryFS extends FuseStubFS {
     }
 
     @Override
-    public int access(String path, int access) {
-        return 0;
-    }
-
-    @Override
     public int create(String path, @mode_t long mode, FuseFileInfo fi) {
         if (getPath(path) != null) {
             return -ErrorCodes.EEXIST();
@@ -278,11 +274,6 @@ public class MemoryFS extends FuseStubFS {
             return 0;
         }
         return -ErrorCodes.ENOENT();
-    }
-
-    @Override
-    public int open(String path, FuseFileInfo info) {
-        return 0;
     }
 
 
