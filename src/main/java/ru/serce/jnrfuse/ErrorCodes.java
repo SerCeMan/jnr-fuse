@@ -1,21 +1,25 @@
 package ru.serce.jnrfuse;
 
+import jnr.constants.platform.Errno;
+
 public class ErrorCodes {
     public static int E2BIG() {
-        return 7;
+        return Errno.E2BIG.intValue();
     }
+
 
     public static int EACCES() {
-        return 13;
+        return Errno.EACCES.intValue();
     }
 
+
     public static int EADDRINUSE() {
-        return 98;
+        return Errno.EADDRINUSE.intValue();
     }
 
 
     public static int EADDRNOTAVAIL() {
-        return 99;
+        return Errno.EADDRNOTAVAIL.intValue();
     }
 
 
@@ -25,12 +29,12 @@ public class ErrorCodes {
 
 
     public static int EAFNOSUPPORT() {
-        return 97;
+        return Errno.EAFNOSUPPORT.intValue();
     }
 
 
     public static int EAGAIN() {
-        return 11;
+        return Errno.EAGAIN.intValue();
     }
 
 
@@ -508,9 +512,11 @@ public class ErrorCodes {
         return 130;
     }
 
-
+    /**
+     * Operation not permitted
+     */
     public static int EPERM() {
-        return 1;
+        return Errno.EPERM.intValue();
     }
 
 

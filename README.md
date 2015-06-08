@@ -18,5 +18,7 @@ For implementing your own filesystem you need just extend FuseStubFS class and i
 See [some examples](https://github.com/SerCeMan/jnr-fuse/tree/master/src/main/java/ru/serce/jnrfuse/examples).
 
 ## Supported platforms
-Now only Linux x64 supported. Linux x32 would be supported soon.
+| Supported platforms |     |      |
+|---------------------|-----|------|
+| Linux               | x64 | x86  |
 

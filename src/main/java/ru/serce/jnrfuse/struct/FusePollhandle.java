@@ -5,6 +5,14 @@ import jnr.ffi.BaseStruct;
 /**
  * @see "fuse_lowlevel.c"
  *
+ * <pre>
+ * struct fuse_pollhandle {
+ *   uint64_t kh;
+ *   struct fuse_chan *ch;
+ *   struct fuse_ll *f;
+ * };
+ * </pre>
+ *
  * @author Sergey Tselovalnikov
  * @since 02.06.15
  */

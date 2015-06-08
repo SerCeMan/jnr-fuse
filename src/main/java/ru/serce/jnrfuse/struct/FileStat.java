@@ -2,6 +2,11 @@ package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.Runtime;
 import jnr.ffi.Struct;
+import jnr.ffi.StructLayout;
+import jnr.posix.Times;
+
+import static jnr.posix.util.Platform.IS_32_BIT;
+import static jnr.posix.util.Platform.IS_64_BIT;
 
 /**
  * stat data structure
@@ -65,27 +70,50 @@ public class FileStat extends Struct {
 
     public FileStat(Runtime runtime) {
         super(runtime);
+        st_dev = new dev_t();
+        pad1 = IS_32_BIT ? new Unsigned16() : null;
+        st_ino = new UnsignedLong();
+        if (IS_32_BIT) {
+            st_mode = new mode_t();
+            st_nlink = new nlink_t();
+        } else {
+            st_nlink = new nlink_t();
+            st_mode = new mode_t();
+        }
+        st_uid = new uid_t();
+        st_gid = new gid_t();
+        st_rdev = new dev_t();
+        pad2 = IS_32_BIT ? new Unsigned16() : null;
+        st_size = new SignedLong();
+        st_blksize = new blkcnt_t();
+        st_blocks = new blkcnt_t();
+        st_atim = inner(new Timespec(getRuntime()));
+        st_mtim = inner(new Timespec(getRuntime()));
+        st_ctim = inner(new Timespec(getRuntime()));
+        __unused4 = IS_64_BIT ? new Signed64() : null;
+        __unused5 = IS_64_BIT ? new Signed64() : null;
+        __unused6 = new Signed64();
     }
 
-    public final Signed64 st_dev = new Signed64();      /* Device.  */
-    public final Signed64 st_ino = new Signed64();      /* File serial number.	*/
-    public final Signed64 st_nlink = new Signed64();    /* Link count.  */
-    public final Signed32 st_mode = new Signed32();     /* File mode.  */
-    public final Signed32 st_uid = new Signed32();      /* User ID of the file's owner.	*/
-    public final Signed32 st_gid = new Signed32();      /* Group ID of the file's group.*/
-    public final Signed64 st_rdev = new Signed64();     /* Device number, if device.  */
-    public final Signed64 st_size = new Signed64();     /* Size of file, in bytes.  */
-    public final Signed64 st_blksize = new Signed64();  /* Optimal block size for I/O.  */
-    public final Signed64 st_blocks = new Signed64();   /* Number 512-byte blocks allocated. */
-    public final Signed64 st_atime = new Signed64();     // Time of last access (time_t)
-    public final Signed64 st_atimensec = new Signed64(); // Time of last access (nanoseconds)
-    public final Signed64 st_mtime = new Signed64();     // Last data modification time (time_t)
-    public final Signed64 st_mtimensec = new Signed64(); // Last data modification time (nanoseconds)
-    public final Signed64 st_ctime = new Signed64();     // Time of last status change (time_t)
-    public final Signed64 st_ctimensec = new Signed64(); // Time of last status change (nanoseconds)
-    public final Signed64 __unused4 = new Signed64();
-    public final Signed64 __unused5 = new Signed64();
-    public final Signed64 __unused6 = new Signed64();
+    public final dev_t st_dev;      /* Device.  */
+    private final Unsigned16 pad1;
+    public final UnsignedLong st_ino;         /* File serial number.	*/
+    public final nlink_t st_nlink;     /* Link count.  */
+    public final mode_t st_mode;       /* File mode.  */
+    public final uid_t st_uid;      /* User ID of the file's owner.	*/
+    public final gid_t st_gid;      /* Group ID of the file's group.*/
+    public final dev_t st_rdev;     /* Device number, if device.  */
+    private final Unsigned16 pad2;
+    public final SignedLong st_size;        /* Size of file, in bytes.  */
+    public final blkcnt_t st_blksize;  /* Optimal block size for I/O.  */
+    public final blkcnt_t st_blocks;   /* Number 512-byte blocks allocated. */
+    public final Timespec st_atim;     /* Time of last access.  */
+    public final Timespec st_mtim;     /* Time of last modification.  */
+    public final Timespec st_ctim;     /* Time of last status change.  */
+
+    public final Signed64 __unused4;
+    public final Signed64 __unused5;
+    public final Signed64 __unused6;
 
     public static FileStat of(jnr.ffi.Pointer memory) {
         FileStat stat = new FileStat(Runtime.getSystemRuntime());

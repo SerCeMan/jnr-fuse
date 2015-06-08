@@ -1,6 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.BaseStruct;
+import jnr.posix.util.Platform;
 
 /**
  * Information about a mounted file system
@@ -37,6 +38,12 @@ public class Statvfs extends BaseStruct {
     public final fsfilcnt64_t f_ffree = new fsfilcnt64_t();  /* # free inodes */
     public final fsfilcnt64_t f_favail = new fsfilcnt64_t(); /* # free inodes for non-root */
     public final UnsignedLong f_fsid = new UnsignedLong();   /* file system ID */
+    public final Signed32 f_unused;
+
+    {
+        f_unused = Platform.IS_32_BIT ? new Signed32() : null;
+    }
+
     public final UnsignedLong f_flag = new UnsignedLong();   /* mount flags */
     public final UnsignedLong f_namemax = new UnsignedLong();/* maximum filename length */
     public final Signed32[] __f_spare = array(new Signed32[6]);

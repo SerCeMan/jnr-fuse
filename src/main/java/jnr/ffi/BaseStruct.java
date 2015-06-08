@@ -23,16 +23,16 @@ public abstract class BaseStruct extends Struct {
         return new Func<>(closureClass);
     }
 
-    public class fsblkcnt64_t extends UnsignedLong {
+    public class fsblkcnt64_t extends Signed64 {
     }
 
-    public class fsfilcnt64_t extends UnsignedLong {
+    public class fsfilcnt64_t extends Signed64 {
     }
 
     public class __time_t extends SignedLong {
     }
 
-    public class __off64_t extends SignedLong {
+    public class __off64_t extends Signed64 {
     }
 
 
