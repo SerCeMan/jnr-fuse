@@ -1,12 +1,10 @@
 package ru.serce.jnrfuse.struct;
 
-import jnr.ffi.*;
-import jnr.ffi.Runtime;
+import jnr.ffi.Struct;
 import jnr.posix.util.Platform;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test for right struct size
@@ -15,8 +13,6 @@ import static org.junit.Assert.*;
  * @since 31.05.15
  */
 public class StructSizeTest {
-
-
 
     @Test
     public void testStatvfs() {
