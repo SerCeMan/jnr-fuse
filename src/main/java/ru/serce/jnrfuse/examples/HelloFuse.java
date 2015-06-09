@@ -13,9 +13,8 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
- * @see <a href="http://fuse.sourceforge.net/helloworld.html">helloworld</a>
- *
  * @author Sergey Tselovalnikov
+ * @see <a href="http://fuse.sourceforge.net/helloworld.html">helloworld</a>
  * @since 31.05.15
  */
 public class HelloFuse extends FuseStubFS {
@@ -41,19 +40,14 @@ public class HelloFuse extends FuseStubFS {
 
     @Override
     public int readdir(String path, Pointer buf, FuseFillDir filter, @off_t long offset, FuseFileInfo fi) {
-        try {
-            if (!"/".equals(path)) {
-                return -ErrorCodes.ENOENT();
-            }
-
-            filter.apply(buf, ".", null, 0);
-            filter.apply(buf, "..", null, 0);
-            filter.apply(buf, HELLO_PATH.substring(1), null, 0);
-            return 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
+        if (!"/".equals(path)) {
+            return -ErrorCodes.ENOENT();
         }
+
+        filter.apply(buf, ".", null, 0);
+        filter.apply(buf, "..", null, 0);
+        filter.apply(buf, HELLO_PATH.substring(1), null, 0);
+        return 0;
     }
 
     @Override
@@ -67,7 +61,7 @@ public class HelloFuse extends FuseStubFS {
     @Override
     public int read(String path, Pointer buf, @size_t long size, @off_t long offset, FuseFileInfo fi) {
         if (!HELLO_PATH.equals(path)) {
-            return -2;
+            return -ErrorCodes.ENOENT();
         }
 
         byte[] bytes = HELLO_STR.getBytes();
