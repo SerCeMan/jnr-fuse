@@ -77,7 +77,7 @@ public class HelloFuse extends FuseStubFS {
         return (int) size;
     }
 
-    public static void main(String[] args) throws InterruptedException, IllegalAccessException, NoSuchFieldException {
+    public static void main(String[] args) {
         HelloFuse stub = new HelloFuse();
         try {
             stub.mount(Paths.get("/tmp/mnt"), true);
