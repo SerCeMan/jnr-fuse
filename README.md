@@ -1,6 +1,6 @@
 jnr-fuse
 ==
-[![Build Status](https://travis-ci.org/SerCeMan/jnr-fuse.svg?branch=master)](https://travis-ci.org/SerCeMan/jnr-fuse) 
+[![Build Status](https://travis-ci.org/SerCeMan/jnr-fuse.svg?branch=master)](https://travis-ci.org/SerCeMan/jnr-fuse)   [![Dependency Status](https://www.versioneye.com/user/projects/55798fad666636001e000005/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55798fad666636001e000005)
 
 jnr-fuse is FUSE implementation in java using Java Native Runtime (JNR). 
 
