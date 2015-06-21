@@ -2,10 +2,12 @@ plugins {
     id 'java'
     id 'idea'
     id 'com.github.johnrengelman.shadow' version '1.2.1'
+    id "com.jfrog.bintray" version "1.1"
+    id 'maven'
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 idea {
@@ -24,6 +26,29 @@ version = '0.1'
 group = 'com.github.serceman'
 
 
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
 
 dependencies {
     compile 'com.github.jnr:jnr-ffi:2.0.3'
@@ -31,4 +56,19 @@ dependencies {
     compile 'com.github.jnr:jnr-constants:0.8.8'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+bintray {
+    user = 'serce'
+    key =
+    configurations = ['archives']
+    dryRun = false
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = 'jnr-fuse'
+        version {
+            name = '0.1'
+        }
+    }
 }
