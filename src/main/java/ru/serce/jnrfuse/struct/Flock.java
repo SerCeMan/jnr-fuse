@@ -29,7 +29,8 @@ public class Flock extends BaseStruct {
     public final __off64_t l_start = new __off64_t();  /* Offset where the lock begins.  */
     public final __off64_t l_len = new __off64_t();    /* Size of the locked area; zero means until EOF.  */
     public final pid_t l_pid = new pid_t();            /* Process holding the lock.  */
-    private final Padding pad;  // for alighnment to 32
+    @SuppressWarnings("unused")
+	private final Padding pad;  // for alighnment to 32
 
     public static Flock of(jnr.ffi.Pointer pointer) {
         Flock flock = new Flock(jnr.ffi.Runtime.getSystemRuntime());

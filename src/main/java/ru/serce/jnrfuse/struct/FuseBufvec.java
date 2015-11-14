@@ -1,8 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
 
-import jnr.ffi.*;
-import jnr.ffi.Runtime;
+import jnr.ffi.BaseStruct;
 
 /**
  * Data buffer vector
