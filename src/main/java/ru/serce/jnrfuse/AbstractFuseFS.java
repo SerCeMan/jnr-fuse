@@ -199,7 +199,7 @@ public abstract class AbstractFuseFS implements FuseFS {
     }
 
     @Override
-    public void mount(Path mountPoint, boolean blocking, boolean debug) {
+    public void mount(Path mountPoint, boolean blocking, boolean debug, String[] fuseOpts) {
         if (!mounted.compareAndSet(false, true)) {
             throw new FuseException("Fuse fs already mounted!");
         }
@@ -210,6 +210,13 @@ public abstract class AbstractFuseFS implements FuseFS {
         } else {
             arg = new String[]{getFSName(), "-f", "-d", mountPoint.toAbsolutePath().toString()};
         }
+        if (fuseOpts.length != 0) {
+            int argLen = arg.length;
+            arg = Arrays.copyOf(arg, argLen + fuseOpts.length);
+            System.arraycopy(fuseOpts, 0, arg, argLen, fuseOpts.length);
+        }
+
+        final String[] args = arg;
         try {
             if (!Files.isDirectory(mountPoint)) {
                 throw new FuseException("Mount point should be directory");
@@ -223,7 +230,7 @@ public abstract class AbstractFuseFS implements FuseFS {
             } else {
                 try {
                     res = CompletableFuture
-                            .supplyAsync(() -> execMount(arg))
+                            .supplyAsync(() -> execMount(args))
                             .get(TIMEOUT, TimeUnit.MILLISECONDS);
                 } catch (TimeoutException e) {
                     // ok
