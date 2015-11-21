@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.serceman:jnr-fuse:0.1'
+    compile 'com.github.serceman:jnr-fuse:0.2'
 }
 ````
 ### Maven
@@ -37,7 +37,7 @@ dependencies {
         <dependency>
             <groupId>com.github.serceman</groupId>
             <artifactId>jnr-fuse</artifactId>
-            <version>0.1</version>
+            <version>0.2</version>
         </dependency>
     </dependencies>
 ```
@@ -46,6 +46,9 @@ dependencies {
 For implementing your own filesystem you need just extend FuseStubFS class and implement methods you need. 
 
 See [some examples](https://github.com/SerCeMan/jnr-fuse/tree/master/src/main/java/ru/serce/jnrfuse/examples).
+
+## Projects using jnr-fuse
+* [Tachyon-FUSE](https://github.com/ibm-research-ireland/tachyon-fuse): Mount a Tachyon DFS using FUSE
 
 ## Supported platforms
 | Supported platforms |     |      |
