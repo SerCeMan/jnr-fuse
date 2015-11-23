@@ -22,7 +22,7 @@ shadowJar {
 }
 
 
-version = '0.2'
+version = '0.2.1'
 group = 'com.github.serceman'
 
 
@@ -69,7 +69,7 @@ bintray {
         repo = 'maven'
         name = 'jnr-fuse'
         version {
-            name = '0.2'
+            name = '0.2.1'
         }
     }
 }
