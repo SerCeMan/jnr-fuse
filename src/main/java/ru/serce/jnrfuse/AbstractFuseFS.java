@@ -226,7 +226,7 @@ public abstract class AbstractFuseFS implements FuseFS {
             }
             int res;
             if (blocking) {
-                res = execMount(arg);
+                res = execMount(args);
             } else {
                 try {
                     res = CompletableFuture
