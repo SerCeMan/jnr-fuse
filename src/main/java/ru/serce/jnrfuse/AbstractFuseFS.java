@@ -171,7 +171,7 @@ public abstract class AbstractFuseFS implements FuseFS {
         if (isImplemented("utimens")) {
             fuseOperations.utimens.set((path, timespec) -> {
                 Timespec timespec1 = Timespec.of(timespec);
-                Timespec timespec2 = Timespec.of(timespec.getPointer(Struct.size(timespec1)));
+                Timespec timespec2 = Timespec.of(timespec.slice(Struct.size(timespec1)));
                 fuse.utimens(path, new Timespec[]{timespec1, timespec2});
             });
         }
