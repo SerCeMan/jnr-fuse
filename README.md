@@ -48,7 +48,7 @@ For implementing your own filesystem you need just extend FuseStubFS class and i
 See [some examples](https://github.com/SerCeMan/jnr-fuse/tree/master/src/main/java/ru/serce/jnrfuse/examples).
 
 ## Projects using jnr-fuse
-* [Tachyon-FUSE](https://github.com/ibm-research-ireland/tachyon-fuse): Mount a Tachyon DFS using FUSE
+* [Tachyon](https://github.com/amplab/tachyon/tree/master/fuse): Tachyon is a memory-centric distributed storage system
 
 ## Supported platforms
 | Supported platforms |     |      |
