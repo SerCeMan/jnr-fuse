@@ -5,6 +5,8 @@ jnr-fuse
 jnr-fuse is FUSE implementation in java using Java Native Runtime (JNR). 
 
 ## Project Goals
+
+[![Join the chat at https://gitter.im/SerCeMan/jnr-fuse](https://badges.gitter.im/SerCeMan/jnr-fuse.svg)](https://gitter.im/SerCeMan/jnr-fuse?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Main goal of the project is to provide easy way to create high-performance filesystem in userspace.
 
 ## About technologies
