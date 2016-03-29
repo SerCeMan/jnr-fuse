@@ -253,7 +253,7 @@ public class FuseStubFS extends AbstractFuseFS {
     public int write_buf(String path, FuseBufvec buf, @off_t long off, FuseFileInfo fi) {
         // TODO.
         // Some problem in implementation, but it not enabling by default
-        int res = 0;
+        int res;
         int size = (int) libFuse.fuse_buf_size(buf);
         FuseBuf flatbuf;
         FuseBufvec tmp = new FuseBufvec(Runtime.getSystemRuntime());
