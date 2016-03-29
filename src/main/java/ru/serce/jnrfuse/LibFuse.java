@@ -44,5 +44,5 @@ public interface LibFuse {
      * @param user_data user data supplied in the context during the init() method
      * @return 0 on success, nonzero on failure
      */
-    int fuse_main_real(int argc, String argv[], FuseOperations op, int op_size, Pointer user_data);
+    int fuse_main_real(int argc, String[] argv, FuseOperations op, int op_size, Pointer user_data);
 }
