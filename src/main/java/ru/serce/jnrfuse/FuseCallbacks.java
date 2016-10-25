@@ -189,79 +189,79 @@ public final class FuseCallbacks {
     @FunctionalInterface
     public interface AccessCallback {
         @Delegate
-        void access(String path, int mask);
+        int access(String path, int mask);
     }
 
     @FunctionalInterface
     public interface CreateCallback {
         @Delegate
-        void create(String path, @mode_t long mode, Pointer fi);
+        int create(String path, @mode_t long mode, Pointer fi);
     }
 
     @FunctionalInterface
     public interface FtruncateCallback {
         @Delegate
-        void ftruncate(String path, @off_t long size, Pointer fi);
+        int ftruncate(String path, @off_t long size, Pointer fi);
     }
 
     @FunctionalInterface
     public interface FgetattrCallback {
         @Delegate
-        void fgetattr(String path, Pointer stbuf, Pointer fi);
+        int fgetattr(String path, Pointer stbuf, Pointer fi);
     }
 
     @FunctionalInterface
     public interface LockCallback {
         @Delegate
-        void lock(String path, Pointer fi, int cmd, Pointer flock);
+        int lock(String path, Pointer fi, int cmd, Pointer flock);
     }
 
     @FunctionalInterface
     public interface UtimensCallback {
         @Delegate
-        void utimens(String path, Pointer timespec);
+        int utimens(String path, Pointer timespec);
     }
 
     @FunctionalInterface
     public interface BmapCallback {
         @Delegate
-        void bmap(String path, @size_t long blocksize, Pointer idx);
+        int bmap(String path, @size_t long blocksize, Pointer idx);
     }
 
     @FunctionalInterface
     public interface IoctlCallback {
         @Delegate
-        void ioctl(String path, int cmd, Pointer arg, Pointer fi, @u_int32_t long flags, Pointer data);
+        int ioctl(String path, int cmd, Pointer arg, Pointer fi, @u_int32_t long flags, Pointer data);
     }
 
     @FunctionalInterface
     public interface PollCallback {
         @Delegate
-        void poll(String path, Pointer fi, Pointer ph, Pointer reventsp);
+        int poll(String path, Pointer fi, Pointer ph, Pointer reventsp);
     }
 
     @FunctionalInterface
     public interface WritebufCallback {
         @Delegate
-        void write_buf(String path, Pointer buf, @off_t long off, Pointer fi);
+        int write_buf(String path, Pointer buf, @off_t long off, Pointer fi);
     }
 
     @FunctionalInterface
     public interface ReadbufCallback {
         @Delegate
-        void read_buf(String path, Pointer bufp, @size_t long size, @off_t long off, Pointer fi);
+        int read_buf(String path, Pointer bufp, @size_t long size, @off_t long off, Pointer fi);
     }
 
     @FunctionalInterface
     public interface FlockCallback {
         @Delegate
-        void flock(String path, Pointer fi, int op);
+        int flock(String path, Pointer fi, int op);
     }
 
     @FunctionalInterface
     public interface FallocateCallback {
         @Delegate
-        void fallocate(String path, int mode, @off_t long off, @off_t long length, Pointer fi);
+        int fallocate(String path, int mode, @off_t long off, @off_t long length, Pointer fi);
     }
 
     private FuseCallbacks() {
