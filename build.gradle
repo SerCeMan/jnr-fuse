@@ -22,7 +22,7 @@ shadowJar {
 }
 
 
-version = '0.3'
+version = '0.3.1'
 group = 'com.github.serceman'
 
 
@@ -61,7 +61,7 @@ dependencies {
 
 bintray {
     user = 'serce'
-    key = ''
+    key = "${System.getenv('BINTRAY_KEY')}"
     configurations = ['archives']
     dryRun = false
     publish = true
@@ -69,7 +69,7 @@ bintray {
         repo = 'maven'
         name = 'jnr-fuse'
         version {
-            name = '0.3'
+            name = '0.3.1'
         }
     }
 }
