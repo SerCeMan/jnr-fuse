@@ -2,11 +2,11 @@ jnr-fuse
 ==
 [![Build Status](https://travis-ci.org/SerCeMan/jnr-fuse.svg?branch=master)](https://travis-ci.org/SerCeMan/jnr-fuse)  [ ![Download](https://api.bintray.com/packages/serce/maven/jnr-fuse/images/download.svg) ](https://bintray.com/serce/maven/jnr-fuse/_latestVersion)  [![Join the chat at https://gitter.im/SerCeMan/jnr-fuse](https://badges.gitter.im/SerCeMan/jnr-fuse.svg)](https://gitter.im/SerCeMan/jnr-fuse?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  [![Dependency Status](https://www.versioneye.com/user/projects/55798fad666636001e000005/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55798fad666636001e000005)
 
-jnr-fuse is FUSE implementation in java using Java Native Runtime (JNR). 
+jnr-fuse is a FUSE implementation in java using Java Native Runtime (JNR). 
 
 ## Project Goals
 
-Main goal of the project is to provide easy way to create high-performance filesystem in userspace.
+The main goal of the project is to provide an easy way to create a high-performance filesystem in userspace.
 
 ## About technologies
 [FUSE](http://fuse.sourceforge.net/) (Filesystem in Userspace)  is an OS mechanism for unix-like OS that lets non-privileged users create their own file systems without editing kernel code. 
@@ -44,7 +44,7 @@ dependencies {
 ```
 
 ## How to use
-For implementing your own filesystem you need just extend FuseStubFS class and implement methods you need. 
+For implementing your own filesystem you just need to extend FuseStubFS class and implement methods you need. 
 
 See [some examples](https://github.com/SerCeMan/jnr-fuse/tree/master/src/main/java/ru/serce/jnrfuse/examples).
 
