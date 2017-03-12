@@ -1,12 +1,10 @@
 package ru.serce.jnrfuse.struct;
 
-import jnr.ffi.Runtime;
-import jnr.ffi.Struct;
-import jnr.ffi.StructLayout;
-import jnr.posix.Times;
-
 import static jnr.posix.util.Platform.IS_32_BIT;
 import static jnr.posix.util.Platform.IS_64_BIT;
+
+import jnr.ffi.Runtime;
+import jnr.ffi.Struct;
 
 /**
  * stat data structure
@@ -96,14 +94,16 @@ public class FileStat extends Struct {
     }
 
     public final dev_t st_dev;      /* Device.  */
-    private final Unsigned16 pad1;
+    @SuppressWarnings("unused")
+	private final Unsigned16 pad1;
     public final UnsignedLong st_ino;         /* File serial number.	*/
     public final nlink_t st_nlink;     /* Link count.  */
     public final mode_t st_mode;       /* File mode.  */
     public final uid_t st_uid;      /* User ID of the file's owner.	*/
     public final gid_t st_gid;      /* Group ID of the file's group.*/
     public final dev_t st_rdev;     /* Device number, if device.  */
-    private final Unsigned16 pad2;
+    @SuppressWarnings("unused")
+	private final Unsigned16 pad2;
     public final SignedLong st_size;        /* Size of file, in bytes.  */
     public final blkcnt_t st_blksize;  /* Optimal block size for I/O.  */
     public final blkcnt_t st_blocks;   /* Number 512-byte blocks allocated. */

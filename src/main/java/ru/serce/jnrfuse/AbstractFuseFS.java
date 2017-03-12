@@ -1,7 +1,22 @@
 package ru.serce.jnrfuse;
 
-import jnr.ffi.*;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+
+import jnr.ffi.LibraryLoader;
+import jnr.ffi.Pointer;
 import jnr.ffi.Runtime;
+import jnr.ffi.Struct;
 import jnr.ffi.mapper.FromNativeConverter;
 import jnr.ffi.provider.jffi.ClosureHelper;
 import ru.serce.jnrfuse.struct.FileStat;
@@ -13,25 +28,6 @@ import ru.serce.jnrfuse.struct.FusePollhandle;
 import ru.serce.jnrfuse.struct.Statvfs;
 import ru.serce.jnrfuse.struct.Timespec;
 import ru.serce.jnrfuse.utils.SecurityUtils;
-
-import java.io.IOException;
-import java.lang.String;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Created by serce on 27.05.15.

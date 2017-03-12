@@ -7,7 +7,8 @@ public abstract class BaseStruct extends Struct {
 
     public class Func<T> extends AbstractMember {
         private final Class<? extends T> closureClass;
-        private T instance;
+        @SuppressWarnings("unused")
+		private T instance;
 
         public Func(Class<? extends T> closureClass) {
             super(NativeType.ADDRESS);
