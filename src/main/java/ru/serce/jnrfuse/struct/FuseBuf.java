@@ -11,10 +11,6 @@ import ru.serce.jnrfuse.flags.FuseBufFlags;
  * be supplied as a memory pointer or as a file descriptor
  */
 public class FuseBuf extends BaseStruct {
-    protected FuseBuf(jnr.ffi.Runtime runtime) {
-        super(runtime);
-    }
-
     /**
      * Size of data in bytes
      */
@@ -45,6 +41,10 @@ public class FuseBuf extends BaseStruct {
      * Used if FUSE_BUF_FD_SEEK flag is set.
      */
     public final off_t pos = new off_t();
+
+    protected FuseBuf(jnr.ffi.Runtime runtime) {
+        super(runtime);
+    }
 
     public static FuseBuf of(jnr.ffi.Pointer pointer) {
         FuseBuf buf = new FuseBuf(jnr.ffi.Runtime.getSystemRuntime());

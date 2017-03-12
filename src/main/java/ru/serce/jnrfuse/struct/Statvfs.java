@@ -24,11 +24,6 @@ public class Statvfs extends BaseStruct {
     public static final int ST_NODIRATIME = 2048;/* Do not update directory access times.  */
     public static final int ST_RELATIME = 4096;	/* Update atime relative to mtime/ctime.  */
 
-
-    public Statvfs(jnr.ffi.Runtime runtime) {
-        super(runtime);
-    }
-
     public final UnsignedLong f_bsize = new UnsignedLong();  /* file system block size */
     public final UnsignedLong f_frsize = new UnsignedLong(); /* fragment size */
     public final fsblkcnt64_t f_blocks = new fsblkcnt64_t(); /* size of fs in f_frsize units */
@@ -48,6 +43,9 @@ public class Statvfs extends BaseStruct {
     public final UnsignedLong f_namemax = new UnsignedLong();/* maximum filename length */
     public final Signed32[] __f_spare = array(new Signed32[6]);
 
+    public Statvfs(jnr.ffi.Runtime runtime) {
+        super(runtime);
+    }
 
     public static Statvfs of(jnr.ffi.Pointer pointer) {
         Statvfs statvfs = new Statvfs(jnr.ffi.Runtime.getSystemRuntime());

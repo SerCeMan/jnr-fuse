@@ -10,10 +10,6 @@ import jnr.ffi.Struct;
  * @since 31.05.15
  */
 public class FuseFileInfo extends Struct {
-    protected FuseFileInfo(jnr.ffi.Runtime runtime) {
-        super(runtime);
-    }
-
     /**
      * Open flags.	 Available in open() and release()
      *
@@ -66,6 +62,10 @@ public class FuseFileInfo extends Struct {
      */
     public final u_int64_t lock_owner = new u_int64_t();
 
+    protected FuseFileInfo(jnr.ffi.Runtime runtime) {
+        super(runtime);
+    }
+    
     public static FuseFileInfo of(jnr.ffi.Pointer pointer) {
         FuseFileInfo fi = new FuseFileInfo(jnr.ffi.Runtime.getSystemRuntime());
         fi.useMemory(pointer);

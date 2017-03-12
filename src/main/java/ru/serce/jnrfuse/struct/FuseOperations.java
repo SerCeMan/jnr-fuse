@@ -13,10 +13,6 @@ import static ru.serce.jnrfuse.FuseCallbacks.*;
  * @since 30.05.15
  */
 public class FuseOperations extends BaseStruct {
-    public FuseOperations(Runtime runtime) {
-        super(runtime);
-    }
-
     public final Func<GetAttrCallback> getattr = func(GetAttrCallback.class);
     public final Func<ReadlinkCallback> readlink = func(ReadlinkCallback.class);
     @Deprecated
@@ -97,4 +93,8 @@ public class FuseOperations extends BaseStruct {
     public final Func<ReadbufCallback> read_buf = func(ReadbufCallback.class);
     public final Func<FlockCallback> flock = func(FlockCallback.class);
     public final Func<FallocateCallback> fallocate = func(FallocateCallback.class);
+
+    public FuseOperations(Runtime runtime) {
+        super(runtime);
+    }
 }

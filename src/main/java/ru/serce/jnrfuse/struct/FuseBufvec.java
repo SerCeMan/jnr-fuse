@@ -16,10 +16,6 @@ import jnr.ffi.Runtime;
  * @since 02.06.15
  */
 public class FuseBufvec extends BaseStruct {
-    public FuseBufvec(jnr.ffi.Runtime runtime) {
-        super(runtime);
-    }
-
     /**
      * Number of buffers in the array
      */
@@ -39,6 +35,10 @@ public class FuseBufvec extends BaseStruct {
      * Array of buffers
      */
     public final FuseBuf buf = inner(new FuseBuf(getRuntime()));
+
+    public FuseBufvec(jnr.ffi.Runtime runtime) {
+        super(runtime);
+    }
 
     public static FuseBufvec of(jnr.ffi.Pointer pointer) {
         FuseBufvec buf = new FuseBufvec(jnr.ffi.Runtime.getSystemRuntime());
