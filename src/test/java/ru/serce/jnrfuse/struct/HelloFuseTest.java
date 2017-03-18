@@ -14,6 +14,10 @@ import static org.junit.Assert.assertTrue;
 public class HelloFuseTest extends BaseFsTest {
     @Test
     public void testReadHello() throws Exception {
+        if (!canRunTest()) {
+            System.out.println("can't run the test on this platform");
+            return;
+        }
         HelloFuse stub = new HelloFuse();
 
         Path tmpDir = Files.createTempDirectory("hellofuse");

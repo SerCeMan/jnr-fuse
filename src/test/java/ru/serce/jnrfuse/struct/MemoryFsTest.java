@@ -17,6 +17,11 @@ import static org.junit.Assert.*;
 public class MemoryFsTest extends BaseFsTest {
     @Test
     public void testReadWrite() throws Exception {
+        if (!canRunTest()) {
+            System.out.println("can't run the test on this platform");
+            return;
+        }
+
         MemoryFS stub = new MemoryFS();
 
         Path tmpDir = Files.createTempDirectory("hellofuse");
