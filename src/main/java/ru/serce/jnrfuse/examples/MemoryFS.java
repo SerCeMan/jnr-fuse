@@ -69,7 +69,7 @@ public class MemoryFS extends FuseStubFS {
 
         @Override
         protected void getattr(FileStat stat) {
-            stat.st_mode.set(FileStat.S_IFDIR);
+            stat.st_mode.set(FileStat.S_IFDIR | 0777);
         }
 
         private synchronized void mkdir(String lastComponent) {
@@ -199,7 +199,7 @@ public class MemoryFS extends FuseStubFS {
     public static void main(String[] args) {
         MemoryFS memfs = new MemoryFS();
         try {
-            memfs.mount(Paths.get("/tmp/mnt"), true);
+            memfs.mount(Paths.get("/tmp/mnttt"), true);
         } finally {
             memfs.umount();
         }

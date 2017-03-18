@@ -34,7 +34,7 @@ public abstract class AbstractFuseFS implements FuseFS {
         String macfuse_version();
     }
 
-    private static final int TIMEOUT = 2000; // seconds
+    private static final int TIMEOUT = 2000; // ms
     private static final String[] osxFuseLibraries = {"fuse4x", "osxfuse", "macfuse", "fuse"};
 
     private Set<String> notImplementedMethods;
@@ -52,20 +52,10 @@ public abstract class AbstractFuseFS implements FuseFS {
                 libFuse = loader.load("libfuse.so.2");
                 break;
             case DARWIN:
-                LibFuseProbe probe;
                 for (String library : osxFuseLibraries) {
                     try {
                         // Regular FUSE-compatible fuse library
                         libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load(library);
-                        break;
-                    } catch (Throwable e) {
-                        // Carry on
-                    }
-                    try {
-                        probe = LibraryLoader.create(LibMacFuseProbe.class).failImmediately().load(library);
-                        ((LibMacFuseProbe) probe).macfuse_version();
-                        // MacFUSE-compatible fuse library
-                        libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("fuse");
                         break;
                     } catch (Throwable e) {
                         // Carry on
