@@ -46,7 +46,11 @@ public class Statvfs extends BaseStruct {
 
     public final UnsignedLong f_flag = new UnsignedLong();   /* mount flags */
     public final UnsignedLong f_namemax = new UnsignedLong();/* maximum filename length */
-    public final Signed32[] __f_spare = array(new Signed32[6]);
+    public final Signed32[] __f_spare;
+
+    {
+        __f_spare = Platform.IS_MAC ? null : new Signed32[6];
+    }
 
 
     public static Statvfs of(jnr.ffi.Pointer pointer) {

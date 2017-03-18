@@ -1,5 +1,14 @@
+os:
+  - linux
+  - osx
+
 language: java
+
 jdk:
   - oraclejdk8
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install osxfuse; fi
+
 before_script:
   - uname -a

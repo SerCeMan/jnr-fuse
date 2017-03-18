@@ -21,14 +21,36 @@ public class Flock extends BaseStruct {
 
     protected Flock(jnr.ffi.Runtime runtime) {
         super(runtime);
-        pad = Platform.IS_64_BIT ? new Padding(NativeType.UCHAR, 4) : null;
+        if (Platform.IS_MAC) {
+//            struct flock {
+//                off_t	l_start;	/* starting offset */
+//                off_t	l_len;		/* len = 0 means until end of file */
+//                pid_t	l_pid;		/* lock owner */
+//                short	l_type;		/* lock type: read/write, etc. */
+//                short	l_whence;	/* type of l_start */
+//            };
+            l_start = new __off64_t();
+            l_len = new __off64_t();
+            l_pid = new pid_t();
+            l_type = new Signed16();
+            l_whence = new Signed16();
+            pad = null;
+        } else {
+            l_type = new Signed16();
+            l_whence = new Signed16();
+            l_start = new __off64_t();
+            l_len = new __off64_t();
+            l_pid = new pid_t();
+            pad = Platform.IS_64_BIT ? new Padding(NativeType.UCHAR, 4) : null;
+        }
+
     }
 
-    public final Signed16 l_type = new Signed16();     /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.	*/
-    public final Signed16 l_whence = new Signed16();   /* Where `l_start' is relative to (like `lseek').  */
-    public final __off64_t l_start = new __off64_t();  /* Offset where the lock begins.  */
-    public final __off64_t l_len = new __off64_t();    /* Size of the locked area; zero means until EOF.  */
-    public final pid_t l_pid = new pid_t();            /* Process holding the lock.  */
+    public final Signed16 l_type;     /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.	*/
+    public final Signed16 l_whence;   /* Where `l_start' is relative to (like `lseek').  */
+    public final __off64_t l_start;  /* Offset where the lock begins.  */
+    public final __off64_t l_len;    /* Size of the locked area; zero means until EOF.  */
+    public final pid_t l_pid;            /* Process holding the lock.  */
     private final Padding pad;  // for alighnment to 32
 
     public static Flock of(jnr.ffi.Pointer pointer) {

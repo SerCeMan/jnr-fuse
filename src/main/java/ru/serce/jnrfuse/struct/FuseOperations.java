@@ -3,6 +3,7 @@ package ru.serce.jnrfuse.struct;
 import jnr.ffi.NativeType;
 import jnr.ffi.Runtime;
 import jnr.ffi.BaseStruct;
+import jnr.posix.util.Platform;
 
 import static ru.serce.jnrfuse.FuseCallbacks.*;
 
@@ -97,4 +98,13 @@ public class FuseOperations extends BaseStruct {
     public final Func<ReadbufCallback> read_buf = func(ReadbufCallback.class);
     public final Func<FlockCallback> flock = func(FlockCallback.class);
     public final Func<FallocateCallback> fallocate = func(FallocateCallback.class);
+
+    {
+        if(Platform.IS_MAC) {
+            // TODO implement MAC-OS specific functions
+            for (int i = 0; i < 13; i++) {
+                func(FallocateCallback.class);
+            }
+        }
+    }
 }

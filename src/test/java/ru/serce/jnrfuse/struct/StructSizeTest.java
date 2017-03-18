@@ -1,106 +1,129 @@
 package ru.serce.jnrfuse.struct;
 
+import jnr.ffi.Runtime;
 import jnr.ffi.Struct;
 import jnr.posix.util.Platform;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Map;
+import java.util.function.Function;
+
 import static org.junit.Assert.assertEquals;
+import static ru.serce.jnrfuse.struct.Utils.Pair.pair;
+import static ru.serce.jnrfuse.struct.PlatformSize.platformSize;
+import static jnr.ffi.Platform.OS.*;
+import static ru.serce.jnrfuse.struct.Utils.asMap;
+
+class PlatformSize {
+    public final int x32;
+    public final int x64;
+
+    PlatformSize(int x32, int x64) {
+        this.x32 = x32;
+        this.x64 = x64;
+    }
+
+    public static PlatformSize platformSize(int x32, int x64) {
+        return new PlatformSize(x32, x64);
+    }
+}
+
 
 /**
- * Test for right struct size
- *
- * @author Sergey Tselovalnikov
- * @since 31.05.15
+ * Test for the right struct size
  */
 public class StructSizeTest {
 
+    private static Map<Class<?>, Map<jnr.ffi.Platform.OS, PlatformSize>> sizes = asMap(
+            pair(Statvfs.class, asMap(
+                    pair(LINUX, platformSize(96, 112)), //
+                    pair(DARWIN, platformSize(64, 64)))),
+            pair(FileStat.class, asMap(
+                    pair(LINUX, platformSize(96, 144)), //
+                    pair(DARWIN, platformSize(96, 144)))),
+            pair(FuseFileInfo.class, asMap(
+                    pair(LINUX, platformSize(32, 40)), //
+                    pair(DARWIN, platformSize(32, 40)))),
+            pair(FuseOperations.class, asMap(
+                    pair(LINUX, platformSize(180, 360)), //
+                    pair(DARWIN, platformSize(232, 464)))),
+            pair(Timespec.class, asMap(
+                    pair(LINUX, platformSize(8, 16)), //
+                    pair(DARWIN, platformSize(8, 16)))),
+            pair(Flock.class, asMap(
+                    pair(LINUX, platformSize(24, 32)), //
+                    pair(DARWIN, platformSize(24, 24)))),
+            pair(FuseBuf.class, asMap(
+                    pair(LINUX, platformSize(24, 40)), //
+                    pair(DARWIN, platformSize(24, 40)))),
+            pair(FuseBufvec.class, asMap(
+                    pair(LINUX, platformSize(36, 64)), //
+                    pair(DARWIN, platformSize(36, 64)))),
+            pair(FusePollhandle.class, asMap(
+                    pair(LINUX, platformSize(16, 24)), //
+                    pair(DARWIN, platformSize(16, 24))))
+    );
+
+    @BeforeClass
+    public static void init() {
+        if (!Platform.IS_32_BIT && !Platform.IS_64_BIT) {
+            throw new IllegalStateException("Unknown platform " + System.getProperty("sun.arch.data.model"));
+        }
+        System.out.println("Running struct size test\nPlatform: " + Platform.ARCH + "\nOS: " + Platform.OS_NAME);
+    }
+
+    private static void assertPlatfomValue(Function<jnr.ffi.Runtime, Struct> structFunction) {
+        Struct struct = structFunction.apply(Runtime.getSystemRuntime());
+        jnr.ffi.Platform.OS os = jnr.ffi.Platform.getNativePlatform().getOS();
+        PlatformSize size = sizes.get(struct.getClass()).get(os);
+        assertEquals(Platform.IS_32_BIT ? size.x32 : size.x64, Struct.size(struct));
+    }
+
+
     @Test
     public void testStatvfs() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(112, Struct.size(new Statvfs(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(96, Struct.size(new Statvfs(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(Statvfs::new);
     }
 
     @Test
     public void testFileStat() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(144, Struct.size(new FileStat(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(96, Struct.size(new FileStat(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(FileStat::new);
     }
 
     @Test
     public void testFuseFileInfo() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(40, Struct.size(new FuseFileInfo(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(32, Struct.size(new FuseFileInfo(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(FuseFileInfo::new);
     }
 
     @Test
     public void testFuseOperations() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(360, Struct.size(new FuseOperations(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(180, Struct.size(new FuseOperations(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(FuseOperations::new);
     }
 
     @Test
     public void testTimeSpec() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(16, Struct.size(new Timespec(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(8, Struct.size(new Timespec(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(Timespec::new);
     }
 
     @Test
     public void testFlock() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(32, Struct.size(new Flock(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(24, Struct.size(new Flock(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(Flock::new);
     }
 
     @Test
     public void testFuseBuf() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(40, Struct.size(new FuseBuf(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(24, Struct.size(new FuseBuf(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(FuseBuf::new);
     }
 
     @Test
     public void testFuseBufvec() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(64, Struct.size(new FuseBufvec(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(36, Struct.size(new FuseBufvec(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(FuseBufvec::new);
     }
 
     @Test
     public void testFusePollhandle() {
-        if (Platform.IS_64_BIT) {
-            assertEquals(24, Struct.size(new FusePollhandle(jnr.ffi.Runtime.getSystemRuntime())));
-        }
-        if (Platform.IS_32_BIT) {
-            assertEquals(16, Struct.size(new FusePollhandle(jnr.ffi.Runtime.getSystemRuntime())));
-        }
+        assertPlatfomValue(FusePollhandle::new);
     }
+
 }

@@ -1,36 +1,25 @@
 package ru.serce.jnrfuse;
 
-import jnr.ffi.*;
+import jnr.ffi.LibraryLoader;
+import jnr.ffi.Pointer;
 import jnr.ffi.Runtime;
+import jnr.ffi.Struct;
 import jnr.ffi.mapper.FromNativeConverter;
 import jnr.ffi.provider.jffi.ClosureHelper;
-import ru.serce.jnrfuse.struct.FileStat;
-import ru.serce.jnrfuse.struct.Flock;
-import ru.serce.jnrfuse.struct.FuseBufvec;
-import ru.serce.jnrfuse.struct.FuseFileInfo;
-import ru.serce.jnrfuse.struct.FuseOperations;
-import ru.serce.jnrfuse.struct.FusePollhandle;
-import ru.serce.jnrfuse.struct.Statvfs;
-import ru.serce.jnrfuse.struct.Timespec;
+import ru.serce.jnrfuse.struct.*;
 import ru.serce.jnrfuse.utils.SecurityUtils;
 
 import java.io.IOException;
-import java.lang.String;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +27,16 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractFuseFS implements FuseFS {
 
+    interface LibFuseProbe {
+    }
+
+    interface LibMacFuseProbe extends LibFuseProbe {
+        String macfuse_version();
+    }
+
     private static final int TIMEOUT = 2000; // seconds
+    private static final String[] osxFuseLibraries = {"fuse4x", "osxfuse", "macfuse", "fuse"};
+
     private Set<String> notImplementedMethods;
     protected final LibFuse libFuse;
     protected final FuseOperations fuseOperations;
@@ -46,8 +44,50 @@ public abstract class AbstractFuseFS implements FuseFS {
     protected Path mountPoint;
 
     public AbstractFuseFS() {
-        LibraryLoader<LibFuse> loader = LibraryLoader.create(LibFuse.class);
-        libFuse = loader.load("libfuse.so.2");
+        LibraryLoader<LibFuse> loader = LibraryLoader.create(LibFuse.class).failImmediately();
+        jnr.ffi.Platform p = jnr.ffi.Platform.getNativePlatform();
+        LibFuse libFuse = null;
+        switch (p.getOS()) {
+            case LINUX:
+                libFuse = loader.load("libfuse.so.2");
+                break;
+            case DARWIN:
+                LibFuseProbe probe;
+                for (String library : osxFuseLibraries) {
+                    try {
+                        // Regular FUSE-compatible fuse library
+                        libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load(library);
+                        break;
+                    } catch (Throwable e) {
+                        // Carry on
+                    }
+                    try {
+                        probe = LibraryLoader.create(LibMacFuseProbe.class).failImmediately().load(library);
+                        ((LibMacFuseProbe) probe).macfuse_version();
+                        // MacFUSE-compatible fuse library
+                        libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("fuse");
+                        break;
+                    } catch (Throwable e) {
+                        // Carry on
+                    }
+                }
+                if (libFuse == null) {
+                    // Everything failed. Do a last-ditch attempt.
+                    // Worst-case scenario, this causes an exception
+                    // which will be more meaningful to the user than a NullPointerException on libFuse.
+                    libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("fuse");
+                }
+                break;
+            default:
+                // try fuse
+                try {
+                    // assume linux
+                    libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("libfuse.so.2");
+                } catch (Throwable e) {
+                    libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("fuse");
+                }
+        }
+        this.libFuse = libFuse;
 
         Runtime runtime = Runtime.getSystemRuntime();
         fuseOperations = new FuseOperations(runtime);
@@ -260,7 +300,12 @@ public abstract class AbstractFuseFS implements FuseFS {
             return;
         }
         try {
-            new ProcessBuilder("fusermount", "-u", "-z", mountPoint.toAbsolutePath().toString()).start();
+            String mountPath = mountPoint.toAbsolutePath().toString();
+            try {
+                new ProcessBuilder("fusermount", "-u", "-z", mountPath).start();
+            } catch (IOException e) {
+                new ProcessBuilder("umount", mountPath).start();
+            }
             mounted.set(false);
         } catch (IOException e) {
             throw new FuseException("Unable to umount FS", e);
