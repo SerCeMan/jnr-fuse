@@ -53,8 +53,8 @@ See [some examples](https://github.com/SerCeMan/jnr-fuse/tree/master/src/main/ja
 * [mux2fs](https://github.com/tfiskgul/mux2fs) Muxes subtitles into Matroska files as a FUSE filesystem
 
 ## Supported platforms
-| Supported platforms |     |      |
-|---------------------|-----|------|
-| Linux               | x64 | x86  |
-| MacOS               | x64 | x86  |
+| Supported platforms                              |     |      |
+|--------------------------------------------------|-----|------|
+| Linux                                            | x64 | x86  |
+| MacOS (via [osxfuse](https://osxfuse.github.io/))| x64 | x86  |
 

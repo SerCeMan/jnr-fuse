@@ -61,7 +61,6 @@ task wrapper(type: Wrapper) {
 }
 
 release {
-    failOnCommitNeeded = false
     newVersionCommitMessage = '[jnr-fuse release] - '
     preTagCommitMessage = '[jnr-fuse release] - pre tag commit: '
     buildTasks = ['clean', 'assemble', 'bintrayUpload']
