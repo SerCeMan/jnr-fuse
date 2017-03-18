@@ -1,4 +1,5 @@
 language: java
+sudo: required
 
 matrix:
   include:
@@ -9,6 +10,10 @@ matrix:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew cask install osxfuse; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -qq pkg-config fuse; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo modprobe fuse; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo chmod 666 /dev/fuse; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo chown root:$USER /etc/fuse.conf; fi
 
 before_script:
   - uname -a
