@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.serceman:jnr-fuse:0.3.1'
+    compile 'com.github.serceman:jnr-fuse:0.4.0'
 }
 ````
 ### Maven
@@ -38,7 +38,7 @@ dependencies {
         <dependency>
             <groupId>com.github.serceman</groupId>
             <artifactId>jnr-fuse</artifactId>
-            <version>0.3.1</version>
+            <version>0.4.0</version>
         </dependency>
     </dependencies>
 ```
@@ -50,9 +50,11 @@ See [some examples](https://github.com/SerCeMan/jnr-fuse/tree/master/src/main/ja
 
 ## Projects using jnr-fuse
 * [Tachyon](https://github.com/amplab/tachyon/tree/master/integration/fuse): Tachyon is a memory-centric distributed storage system
+* [mux2fs](https://github.com/tfiskgul/mux2fs) Muxes subtitles into Matroska files as a FUSE filesystem
 
 ## Supported platforms
 | Supported platforms |     |      |
 |---------------------|-----|------|
 | Linux               | x64 | x86  |
+| MacOS               | x64 | x86  |
 

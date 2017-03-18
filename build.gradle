@@ -63,7 +63,7 @@ task wrapper(type: Wrapper) {
 release {
     newVersionCommitMessage = '[jnr-fuse release] - '
     preTagCommitMessage = '[jnr-fuse release] - pre tag commit: '
-    buildTasks = ['clean', 'build', 'bintrayUpload']
+    buildTasks = ['clean', 'build -x test', 'bintrayUpload']
 }
 
 bintray {
