@@ -4,6 +4,7 @@ import jnr.ffi.Pointer;
 import jnr.ffi.types.size_t;
 import jnr.ffi.types.ssize_t;
 import ru.serce.jnrfuse.struct.FuseBufvec;
+import ru.serce.jnrfuse.struct.FuseContext;
 import ru.serce.jnrfuse.struct.FuseOperations;
 import ru.serce.jnrfuse.struct.FusePollhandle;
 
@@ -25,6 +26,8 @@ public interface LibFuse {
     void fuse_pollhandle_destroy(FusePollhandle ph);
 
     int fuse_notify_poll(FusePollhandle ph);
+
+    FuseContext fuse_get_context();
 
     /**
      * Main function of FUSE.

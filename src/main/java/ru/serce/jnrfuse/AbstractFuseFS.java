@@ -84,6 +84,10 @@ public abstract class AbstractFuseFS implements FuseFS {
         init(fuseOperations);
     }
 
+    public FuseContext getContext() {
+        return libFuse.fuse_get_context();
+    }
+
     private void init(FuseOperations fuseOperations) {
         notImplementedMethods = Arrays.stream(getClass().getMethods())
                 .filter(method -> method.getAnnotation(NotImplemented.class) != null)
