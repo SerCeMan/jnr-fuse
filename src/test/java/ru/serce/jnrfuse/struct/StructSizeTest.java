@@ -62,7 +62,11 @@ public class StructSizeTest {
                     pair(DARWIN, platformSize(36, 64)))),
             pair(FusePollhandle.class, asMap(
                     pair(LINUX, platformSize(16, 24)), //
-                    pair(DARWIN, platformSize(16, 24))))
+                    pair(DARWIN, platformSize(16, 24)))),
+            pair(FuseContext.class, asMap(
+                    // the real x64 size is 40 because of alignment
+                    pair(LINUX, platformSize(24, 36)), //
+                    pair(DARWIN, platformSize(24, 34))))
     );
 
     @BeforeClass
@@ -126,4 +130,8 @@ public class StructSizeTest {
         assertPlatfomValue(FusePollhandle::new);
     }
 
+    @Test
+    public void testFuseContext() {
+        assertPlatfomValue(FuseContext::new);
+    }
 }
