@@ -7,9 +7,9 @@ import jnr.ffi.Struct;
 import jnr.ffi.mapper.FromNativeConverter;
 import jnr.ffi.provider.jffi.ClosureHelper;
 import ru.serce.jnrfuse.struct.*;
+import ru.serce.jnrfuse.utils.MountUtils;
 import ru.serce.jnrfuse.utils.SecurityUtils;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -283,17 +283,8 @@ public abstract class AbstractFuseFS implements FuseFS {
         if (!mounted.get()) {
             return;
         }
-        try {
-            String mountPath = mountPoint.toAbsolutePath().toString();
-            try {
-                new ProcessBuilder("fusermount", "-u", "-z", mountPath).start();
-            } catch (IOException e) {
-                new ProcessBuilder("umount", mountPath).start();
-            }
-            mounted.set(false);
-        } catch (IOException e) {
-            throw new FuseException("Unable to umount FS", e);
-        }
+        MountUtils.umount(mountPoint);
+        mounted.set(false);
     }
 
     protected String getFSName() {
