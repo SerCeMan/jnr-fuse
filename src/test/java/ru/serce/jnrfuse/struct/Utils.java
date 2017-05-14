@@ -3,6 +3,8 @@ package ru.serce.jnrfuse.struct;
 import java.util.HashMap;
 
 public class Utils {
+
+    @SafeVarargs
     public static <TKey, TValue> HashMap<TKey, TValue> asMap(Pair<? extends TKey, ? extends TValue>... pairs) {
         HashMap<TKey, TValue> map = new HashMap<>();
         for (Pair<? extends TKey, ? extends TValue> pair : pairs) {

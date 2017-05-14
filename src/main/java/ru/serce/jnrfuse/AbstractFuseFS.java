@@ -22,17 +22,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-/**
- * Created by serce on 27.05.15.
- */
 public abstract class AbstractFuseFS implements FuseFS {
-
-    interface LibFuseProbe {
-    }
-
-    interface LibMacFuseProbe extends LibFuseProbe {
-        String macfuse_version();
-    }
 
     private static final int TIMEOUT = 2000; // ms
     private static final String[] osxFuseLibraries = {"fuse4x", "osxfuse", "macfuse", "fuse"};
