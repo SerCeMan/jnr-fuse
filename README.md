@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.serceman:jnr-fuse:0.4.0'
+    compile 'com.github.serceman:jnr-fuse:0.4.1'
 }
 ````
 ### Maven
@@ -38,7 +38,7 @@ dependencies {
         <dependency>
             <groupId>com.github.serceman</groupId>
             <artifactId>jnr-fuse</artifactId>
-            <version>0.4.0</version>
+            <version>0.4.1</version>
         </dependency>
     </dependencies>
 ```
@@ -47,6 +47,8 @@ dependencies {
 For implementing your own filesystem you just need to extend FuseStubFS class and implement methods you need. 
 
 See [some examples](https://github.com/SerCeMan/jnr-fuse/tree/master/src/main/java/ru/serce/jnrfuse/examples).
+
+See [blog article about the implementation](http://serce.me/posts/22-06-2015-jnr-fuse/)
 
 ## Projects using jnr-fuse
 * [Tachyon](https://github.com/amplab/tachyon/tree/master/integration/fuse): Tachyon is a memory-centric distributed storage system
