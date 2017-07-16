@@ -119,6 +119,30 @@ public class FileStat extends Struct {
             __unused4 = null;
             __unused5 = null;
             __unused6 = null;
+        } else if (Platform.IS_WINDOWS) {
+            st_dev = new dev_t();
+            st_ino = new u_int64_t();
+            st_mode = new Signed32();
+            st_nlink = new Signed16();
+            st_uid = new uid_t();
+            st_gid = new gid_t();
+            st_rdev = new dev_t();
+            st_size = new off_t();
+            st_atim = inner(new Timespec(getRuntime()));
+            st_mtim = inner(new Timespec(getRuntime()));
+            st_ctim = inner(new Timespec(getRuntime()));
+            st_blksize = new blksize_t();
+            st_blocks = new Signed64();
+            st_birthtime = inner(new Timespec(getRuntime()));
+
+            // graveyard
+            pad1 = null;
+            pad2 = null;
+            __unused4 = null;
+            __unused5 = null;
+            __unused6 = null;
+            st_flags = null;
+            st_gen = null;
         } else {
             st_dev = new dev_t();
             pad1 = IS_32_BIT ? new Unsigned16() : null;
@@ -154,15 +178,15 @@ public class FileStat extends Struct {
     public final dev_t st_dev;      /* Device.  */
     private final Unsigned16 pad1;
     public final NumberField st_ino;         /* File serial number.	*/
-    public final nlink_t st_nlink;     /* Link count.  */
-    public final mode_t st_mode;       /* File mode.  */
+    public final NumberField st_nlink;     /* Link count.  */
+    public final NumberField st_mode;       /* File mode.  */
     public final uid_t st_uid;      /* User ID of the file's owner.	*/
     public final gid_t st_gid;      /* Group ID of the file's group.*/
     public final dev_t st_rdev;     /* Device number, if device.  */
     private final Unsigned16 pad2;
     public final NumberField st_size;        /* Size of file, in bytes.  */
     public final blksize_t st_blksize;  /* Optimal block size for I/O.  */
-    public final blkcnt_t st_blocks;   /* Number 512-byte blocks allocated. */
+    public final NumberField st_blocks;   /* Number 512-byte blocks allocated. */
     public final Timespec st_atim;     /* Time of last access.  */
     public final Timespec st_mtim;     /* Time of last modification.  */
     public final Timespec st_ctim;     /* Time of last status change.  */

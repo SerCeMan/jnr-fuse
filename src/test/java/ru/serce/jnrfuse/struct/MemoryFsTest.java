@@ -1,6 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
 
+import jnr.posix.util.Platform;
 import org.junit.Test;
 import ru.serce.jnrfuse.examples.MemoryFS;
 
@@ -19,7 +20,10 @@ public class MemoryFsTest extends BaseFsTest {
     public void testReadWrite() throws Exception {
         MemoryFS stub = new MemoryFS();
 
-        Path tmpDir = Files.createTempDirectory("hellofuse");
+        Path tmpDir = Files.createTempDirectory("memfuse");
+        if(Platform.IS_WINDOWS) {
+            assertTrue(tmpDir.toFile().delete());
+        }
         blockingMount(stub, tmpDir);
         try {
             File fileOne = new File(tmpDir.toAbsolutePath() + "/file1");

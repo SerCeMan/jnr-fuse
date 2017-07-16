@@ -1,6 +1,7 @@
 package ru.serce.jnrfuse.examples;
 
 
+import jnr.ffi.Platform;
 import jnr.ffi.Pointer;
 import jnr.ffi.types.mode_t;
 import jnr.ffi.types.off_t;
@@ -9,7 +10,6 @@ import ru.serce.jnrfuse.ErrorCodes;
 import ru.serce.jnrfuse.FuseFillDir;
 import ru.serce.jnrfuse.FuseStubFS;
 import ru.serce.jnrfuse.struct.FileStat;
-import ru.serce.jnrfuse.struct.FuseBufvec;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
 
 import java.io.UnsupportedEncodingException;
@@ -199,7 +199,15 @@ public class MemoryFS extends FuseStubFS {
     public static void main(String[] args) {
         MemoryFS memfs = new MemoryFS();
         try {
-            memfs.mount(Paths.get("/tmp/mnttt"), true);
+            String path;
+            switch (Platform.getNativePlatform().getOS()) {
+                case WINDOWS:
+                    path = "C:\\hello22";
+                    break;
+                default:
+                    path = "/tmp/mnt";
+            }
+            memfs.mount(Paths.get(path), true, true);
         } finally {
             memfs.umount();
         }
@@ -209,11 +217,11 @@ public class MemoryFS extends FuseStubFS {
 
     public MemoryFS() {
         // Sprinkle some files around
-        rootDirectory.add(new MemoryFile("Sample file.txt", "Hello there, feel free to look around.\n"));
-        rootDirectory.add(new MemoryDirectory("Sample directory"));
-        MemoryDirectory dirWithFiles = new MemoryDirectory("Directory with files");
+        rootDirectory.add(new MemoryFile("SAMPLEFILE.TXT", "Hello there, feel free to look around.\n"));
+        rootDirectory.add(new MemoryDirectory("SAMPLE DIRECTORY"));
+        MemoryDirectory dirWithFiles = new MemoryDirectory("DIRECTORY WITH FILES");
         rootDirectory.add(dirWithFiles);
-        dirWithFiles.add(new MemoryFile("hello.txt", "This is some sample text.\n"));
+        dirWithFiles.add(new MemoryFile("HELLO.TXT", "This is some sample text.\n"));
         dirWithFiles.add(new MemoryFile("hello again.txt", "This another file with text in it! Oh my!\n"));
         MemoryDirectory nestedDirectory = new MemoryDirectory("Sample nested directory");
         dirWithFiles.add(nestedDirectory);

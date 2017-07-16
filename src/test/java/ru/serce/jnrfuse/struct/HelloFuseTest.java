@@ -1,5 +1,6 @@
 package ru.serce.jnrfuse.struct;
 
+import jnr.posix.util.Platform;
 import org.junit.Test;
 import ru.serce.jnrfuse.examples.HelloFuse;
 
@@ -17,6 +18,9 @@ public class HelloFuseTest extends BaseFsTest {
         HelloFuse stub = new HelloFuse();
 
         Path tmpDir = Files.createTempDirectory("hellofuse");
+        if(Platform.IS_WINDOWS) {
+            assertTrue(tmpDir.toFile().delete());
+        }
         blockingMount(stub, tmpDir);
         try {
             File helloFile = new File(tmpDir.toAbsolutePath() + HelloFuse.HELLO_PATH);

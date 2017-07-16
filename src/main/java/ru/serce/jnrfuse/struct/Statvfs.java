@@ -49,7 +49,7 @@ public class Statvfs extends BaseStruct {
     public final Signed32[] __f_spare;
 
     {
-        __f_spare = Platform.IS_MAC ? null : array(new Signed32[6]);
+        __f_spare = Platform.IS_MAC || Platform.IS_WINDOWS ? null : array(new Signed32[6]);
     }
 
 

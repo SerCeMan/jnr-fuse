@@ -58,6 +58,9 @@ public abstract class AbstractFuseFS implements FuseFS {
                     libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("fuse");
                 }
                 break;
+            case WINDOWS:
+                libFuse = loader.load("C:\\Program Files (x86)\\WinFsp\\bin\\winfsp-x64.dll");
+                break;
             default:
                 // try fuse
                 try {
@@ -243,7 +246,7 @@ public abstract class AbstractFuseFS implements FuseFS {
         final String[] args = arg;
         try {
             if (!Files.isDirectory(mountPoint)) {
-                throw new FuseException("Mount point should be directory");
+//                throw new FuseException("Mount point should be directory");
             }
             if (SecurityUtils.canHandleShutdownHooks()) {
                 java.lang.Runtime.getRuntime().addShutdownHook(new Thread(this::umount));
