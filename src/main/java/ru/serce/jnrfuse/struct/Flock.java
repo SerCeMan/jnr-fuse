@@ -35,6 +35,13 @@ public class Flock extends BaseStruct {
             l_type = new Signed16();
             l_whence = new Signed16();
             pad = null;
+        } else if (Platform.IS_WINDOWS) {
+            l_type = new Signed16();
+            l_whence = new Signed16();
+            l_start = new __off64_t();
+            l_len = new __off64_t();
+            l_pid = new pid_t();
+            pad = null;
         } else {
             l_type = new Signed16();
             l_whence = new Signed16();

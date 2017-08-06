@@ -16,7 +16,7 @@ public class HelloFuseTest extends BaseFsTest {
     public void testReadHello() throws Exception {
         HelloFuse stub = new HelloFuse();
 
-        Path tmpDir = Files.createTempDirectory("hellofuse");
+        Path tmpDir = tempPath();
         blockingMount(stub, tmpDir);
         try {
             File helloFile = new File(tmpDir.toAbsolutePath() + HelloFuse.HELLO_PATH);

@@ -19,7 +19,7 @@ public class MemoryFsTest extends BaseFsTest {
     public void testReadWrite() throws Exception {
         MemoryFS stub = new MemoryFS();
 
-        Path tmpDir = Files.createTempDirectory("hellofuse");
+        Path tmpDir = tempPath();
         blockingMount(stub, tmpDir);
         try {
             File fileOne = new File(tmpDir.toAbsolutePath() + "/file1");

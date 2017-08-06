@@ -1,5 +1,6 @@
 package ru.serce.jnrfuse.examples;
 
+import jnr.ffi.Platform;
 import jnr.ffi.Pointer;
 import jnr.ffi.types.off_t;
 import jnr.ffi.types.size_t;
@@ -28,7 +29,7 @@ public class HelloFuse extends FuseStubFS {
         if (Objects.equals(path, "/")) {
             stat.st_mode.set(FileStat.S_IFDIR | 0755);
             stat.st_nlink.set(2);
-        } else if ("/hello".equals(path)) {
+        } else if (HELLO_PATH.equals(path)) {
             stat.st_mode.set(FileStat.S_IFREG | 0444);
             stat.st_nlink.set(1);
             stat.st_size.set(HELLO_STR.getBytes().length);
@@ -80,7 +81,15 @@ public class HelloFuse extends FuseStubFS {
     public static void main(String[] args) {
         HelloFuse stub = new HelloFuse();
         try {
-            stub.mount(Paths.get("/tmp/mnt"), true, true);
+            String path;
+            switch (Platform.getNativePlatform().getOS()) {
+                case WINDOWS:
+                    path = "J:\\";
+                    break;
+                default:
+                    path = "/tmp/mnth";
+            }
+            stub.mount(Paths.get(path), true, true);
         } finally {
             stub.umount();
         }

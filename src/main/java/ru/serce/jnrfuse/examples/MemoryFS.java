@@ -1,6 +1,7 @@
 package ru.serce.jnrfuse.examples;
 
 
+import jnr.ffi.Platform;
 import jnr.ffi.Pointer;
 import jnr.ffi.types.mode_t;
 import jnr.ffi.types.off_t;
@@ -9,7 +10,6 @@ import ru.serce.jnrfuse.ErrorCodes;
 import ru.serce.jnrfuse.FuseFillDir;
 import ru.serce.jnrfuse.FuseStubFS;
 import ru.serce.jnrfuse.struct.FileStat;
-import ru.serce.jnrfuse.struct.FuseBufvec;
 import ru.serce.jnrfuse.struct.FuseFileInfo;
 
 import java.io.UnsupportedEncodingException;
@@ -112,6 +112,8 @@ public class MemoryFS extends FuseStubFS {
         protected void getattr(FileStat stat) {
             stat.st_mode.set(FileStat.S_IFREG | 0777);
             stat.st_size.set(contents.capacity());
+            stat.st_uid.set(getContext().uid.get());
+            stat.st_gid.set(getContext().pid.get());
         }
 
         private int read(Pointer buffer, long size, long offset) {
@@ -199,7 +201,15 @@ public class MemoryFS extends FuseStubFS {
     public static void main(String[] args) {
         MemoryFS memfs = new MemoryFS();
         try {
-            memfs.mount(Paths.get("/tmp/mnttt"), true);
+            String path;
+            switch (Platform.getNativePlatform().getOS()) {
+                case WINDOWS:
+                    path = "J:\\";
+                    break;
+                default:
+                    path = "/tmp/mntm";
+            }
+            memfs.mount(Paths.get(path), true, true);
         } finally {
             memfs.umount();
         }
@@ -356,6 +366,11 @@ public class MemoryFS extends FuseStubFS {
             return -ErrorCodes.ENOENT();
         }
         p.delete();
+        return 0;
+    }
+
+    @Override
+    public int open(String path, FuseFileInfo fi) {
         return 0;
     }
 
