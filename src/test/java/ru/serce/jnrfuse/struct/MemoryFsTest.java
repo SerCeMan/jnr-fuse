@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -20,9 +21,11 @@ public class MemoryFsTest extends BaseFsTest {
     public void testReadWrite() throws Exception {
         MemoryFS stub = new MemoryFS();
 
-        Path tmpDir = Files.createTempDirectory("memfuse");
+        Path tmpDir;
         if(Platform.IS_WINDOWS) {
-            assertTrue(tmpDir.toFile().delete());
+            tmpDir = Paths.get("X:\\");
+        } else {
+            tmpDir = Files.createTempDirectory("memfuse");
         }
         blockingMount(stub, tmpDir);
         try {

@@ -1,5 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
+import jnr.ffi.BaseStruct;
+import jnr.ffi.BaseStruct.fsfilcnt64_t;
 import jnr.ffi.Runtime;
 import jnr.ffi.Struct;
 import jnr.posix.util.Platform;
@@ -58,15 +60,19 @@ public class StructSizeTest {
                     pair(DARWIN, platformSize(8, 16)))),
             pair(Flock.class, asMap(
                     pair(LINUX, platformSize(24, 32)), //
+                    pair(WINDOWS, platformSize(24, 32)), //
                     pair(DARWIN, platformSize(24, 24)))),
             pair(FuseBuf.class, asMap(
                     pair(LINUX, platformSize(24, 40)), //
+                    pair(WINDOWS, platformSize(24, 40)), //
                     pair(DARWIN, platformSize(24, 40)))),
             pair(FuseBufvec.class, asMap(
                     pair(LINUX, platformSize(36, 64)), //
+                    pair(WINDOWS, platformSize(36, 64)), //
                     pair(DARWIN, platformSize(36, 64)))),
             pair(FusePollhandle.class, asMap(
                     pair(LINUX, platformSize(16, 24)), //
+                    pair(WINDOWS, platformSize(16, 24)), //
                     pair(DARWIN, platformSize(16, 24)))),
             pair(FuseContext.class, asMap(
                     // the real x64 size is 40 because of alignment
@@ -93,6 +99,22 @@ public class StructSizeTest {
 
     @Test
     public void testStatvfs() {
+        System.out.println("st_dev " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new dev_t(); }}));
+        System.out.println("unsigned long " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new UnsignedLong(); }}));
+        System.out.println("fsblkcnt64_t " + Struct.size(new BaseStruct(Runtime.getSystemRuntime()) {{ new fsblkcnt64_t(); }}));
+        System.out.println("fsfilcnt64_t " + Struct.size(new BaseStruct(Runtime.getSystemRuntime()) {{ new fsfilcnt64_t(); }}));
+        System.out.println("u_int64_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new u_int64_t(); }}));
+        System.out.println("Statvfs " + Struct.size(new Statvfs(Runtime.getSystemRuntime())));
+        System.out.println("st_mode " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new Signed32(); }}));
+        System.out.println("st_nlink " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new nlink_t(); }}));
+        System.out.println("uid_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new uid_t(); }}));
+        System.out.println("gid_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new gid_t(); }}));
+        System.out.println("st_rdev " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new dev_t(); }}));
+        System.out.println("off_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new off_t(); }}));
+        System.out.println("st_atim " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ inner(new Timespec(getRuntime())); }}));
+        System.out.println("blksize_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new blksize_t(); }}));
+        System.out.println("st_blocks " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new blkcnt_t(); }}));
+        System.out.println("fuse_mode_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new mode_t(); }}));
         assertPlatfomValue(Statvfs::new);
     }
 
@@ -138,19 +160,6 @@ public class StructSizeTest {
 
     @Test
     public void testFuseContext() {
-        System.out.println("st_dev " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new dev_t(); }}));
-        System.out.println("u_int64_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new u_int64_t(); }}));
-        System.out.println("st_mode " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new Signed32(); }}));
-        System.out.println("st_nlink " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new nlink_t(); }}));
-        System.out.println("uid_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new uid_t(); }}));
-        System.out.println("gid_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new gid_t(); }}));
-        System.out.println("st_rdev " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new dev_t(); }}));
-        System.out.println("off_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new off_t(); }}));
-        System.out.println("st_atim " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ inner(new Timespec(getRuntime())); }}));
-        System.out.println("blksize_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new blksize_t(); }}));
-        System.out.println("st_blocks " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new blkcnt_t(); }}));
-        System.out.println("fuse_mode_t " + Struct.size(new Struct(Runtime.getSystemRuntime()) {{ new mode_t(); }}));
         assertPlatfomValue(FuseContext::new);
-
     }
 }

@@ -232,10 +232,14 @@ public abstract class AbstractFuseFS implements FuseFS {
         }
         this.mountPoint = mountPoint;
         String[] arg;
+        String mountPointStr = mountPoint.toAbsolutePath().toString();
+        if (mountPointStr.endsWith("\\")) {
+            mountPointStr = mountPointStr.substring(0, mountPointStr.length() - 1);
+        }
         if (!debug) {
-            arg = new String[]{getFSName(), "-f", mountPoint.toAbsolutePath().toString()};
+            arg = new String[]{getFSName(), "-f", mountPointStr};
         } else {
-            arg = new String[]{getFSName(), "-f", "-d", mountPoint.toAbsolutePath().toString()};
+            arg = new String[]{getFSName(), "-f", "-d", mountPointStr};
         }
         if (fuseOpts.length != 0) {
             int argLen = arg.length;

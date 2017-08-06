@@ -1,6 +1,7 @@
 package ru.serce.jnrfuse.struct;
 
 import jnr.ffi.BaseStruct;
+import jnr.ffi.Struct;
 import jnr.posix.util.Platform;
 
 /**
@@ -27,30 +28,50 @@ public class Statvfs extends BaseStruct {
 
     public Statvfs(jnr.ffi.Runtime runtime) {
         super(runtime);
+        if (Platform.IS_WINDOWS) {
+            f_bsize =  new u_int64_t();
+            f_frsize = new u_int64_t();
+            f_blocks = new fsblkcnt64_t();
+            f_bfree = new fsblkcnt64_t();
+            f_bavail = new fsblkcnt64_t();
+            f_files = new fsfilcnt64_t();
+            f_ffree = new fsfilcnt64_t();
+            f_favail = new fsfilcnt64_t();
+            f_fsid = new u_int64_t();
+            f_flag = new u_int64_t();
+            f_namemax = new u_int64_t();
+            f_unused =  null;
+            __f_spare = null;
+        } else {
+            f_bsize =  new UnsignedLong();
+            f_frsize = new UnsignedLong();
+            f_blocks = new fsblkcnt64_t();
+            f_bfree = new fsblkcnt64_t();
+            f_bavail = new fsblkcnt64_t();
+            f_files = new fsfilcnt64_t();
+            f_ffree = new fsfilcnt64_t();
+            f_favail = new fsfilcnt64_t();
+            f_fsid = new UnsignedLong();
+            f_unused = Platform.IS_32_BIT ? new Signed32() : null;
+            f_flag = new UnsignedLong();
+            f_namemax = new UnsignedLong();
+            __f_spare = Platform.IS_MAC  ? null : array(new Signed32[6]);
+        }
     }
 
-    public final UnsignedLong f_bsize = new UnsignedLong();  /* file system block size */
-    public final UnsignedLong f_frsize = new UnsignedLong(); /* fragment size */
-    public final fsblkcnt64_t f_blocks = new fsblkcnt64_t(); /* size of fs in f_frsize units */
-    public final fsblkcnt64_t f_bfree = new fsblkcnt64_t();  /* # free blocks */
-    public final fsblkcnt64_t f_bavail = new fsblkcnt64_t(); /* # free blocks for non-root */
-    public final fsfilcnt64_t f_files = new fsfilcnt64_t();  /* # inodes */
-    public final fsfilcnt64_t f_ffree = new fsfilcnt64_t();  /* # free inodes */
-    public final fsfilcnt64_t f_favail = new fsfilcnt64_t(); /* # free inodes for non-root */
-    public final UnsignedLong f_fsid = new UnsignedLong();   /* file system ID */
+    public final NumberField f_bsize;   /* file system block size */
+    public final NumberField f_frsize;  /* fragment size */
+    public final fsblkcnt64_t f_blocks; /* size of fs in f_frsize units */
+    public final fsblkcnt64_t f_bfree;  /* # free blocks */
+    public final fsblkcnt64_t f_bavail; /* # free blocks for non-root */
+    public final fsfilcnt64_t f_files;  /* # inodes */
+    public final fsfilcnt64_t f_ffree;  /* # free inodes */
+    public final fsfilcnt64_t f_favail; /* # free inodes for non-root */
+    public final NumberField f_fsid;    /* file system ID */
     public final Signed32 f_unused;
-
-    {
-        f_unused = Platform.IS_32_BIT ? new Signed32() : null;
-    }
-
-    public final UnsignedLong f_flag = new UnsignedLong();   /* mount flags */
-    public final UnsignedLong f_namemax = new UnsignedLong();/* maximum filename length */
+    public final NumberField f_flag;    /* mount flags */
+    public final NumberField f_namemax; /* maximum filename length */
     public final Signed32[] __f_spare;
-
-    {
-        __f_spare = Platform.IS_MAC || Platform.IS_WINDOWS ? null : array(new Signed32[6]);
-    }
 
 
     public static Statvfs of(jnr.ffi.Pointer pointer) {

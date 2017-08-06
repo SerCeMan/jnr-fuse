@@ -1,11 +1,15 @@
 package ru.serce.jnrfuse.examples;
 
 
+import jnr.ffi.LibraryLoader;
 import jnr.ffi.Platform;
 import jnr.ffi.Pointer;
 import jnr.ffi.types.mode_t;
 import jnr.ffi.types.off_t;
 import jnr.ffi.types.size_t;
+import jnr.posix.LibC;
+import jnr.posix.POSIX;
+import jnr.posix.POSIXFactory;
 import ru.serce.jnrfuse.ErrorCodes;
 import ru.serce.jnrfuse.FuseFillDir;
 import ru.serce.jnrfuse.FuseStubFS;
@@ -112,6 +116,8 @@ public class MemoryFS extends FuseStubFS {
         protected void getattr(FileStat stat) {
             stat.st_mode.set(FileStat.S_IFREG | 0777);
             stat.st_size.set(contents.capacity());
+            stat.st_uid.set(getContext().uid.get());
+            stat.st_gid.set(getContext().pid.get());
         }
 
         private int read(Pointer buffer, long size, long offset) {
@@ -197,12 +203,14 @@ public class MemoryFS extends FuseStubFS {
     }
 
     public static void main(String[] args) {
+        POSIX posix = POSIXFactory.getPOSIX();
+        System.out.println("UID" + posix.geteuid());
         MemoryFS memfs = new MemoryFS();
         try {
             String path;
             switch (Platform.getNativePlatform().getOS()) {
                 case WINDOWS:
-                    path = "C:\\hello22";
+                    path = "J:\\";
                     break;
                 default:
                     path = "/tmp/mnt";
@@ -364,6 +372,11 @@ public class MemoryFS extends FuseStubFS {
             return -ErrorCodes.ENOENT();
         }
         p.delete();
+        return 0;
+    }
+
+    @Override
+    public int open(String path, FuseFileInfo fi) {
         return 0;
     }
 
