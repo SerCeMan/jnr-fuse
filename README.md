@@ -55,8 +55,10 @@ See [blog article about the implementation](http://serce.me/posts/22-06-2015-jnr
 * [mux2fs](https://github.com/tfiskgul/mux2fs) Muxes subtitles into Matroska files as a FUSE filesystem
 
 ## Supported platforms
-| Supported platforms                              |     |      |
-|--------------------------------------------------|-----|------|
-| Linux                                            | x64 | x86  |
-| MacOS (via [osxfuse](https://osxfuse.github.io/))| x64 | x86  |
+| Supported platforms                                           |     |      |
+|---------------------------------------------------------------|-----|------|
+| Linux                                                         | x64 | x86  |
+| MacOS (via [osxfuse](https://osxfuse.github.io/))             | x64 | x86  |
+| Windows (via [winfsp](https://github.com/billziss-gh/winfsp/))| x64 | n/a  |
+
 
