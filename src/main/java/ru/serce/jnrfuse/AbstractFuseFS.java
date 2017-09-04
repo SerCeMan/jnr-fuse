@@ -6,6 +6,7 @@ import jnr.ffi.Runtime;
 import jnr.ffi.Struct;
 import jnr.ffi.mapper.FromNativeConverter;
 import jnr.ffi.provider.jffi.ClosureHelper;
+import jnr.posix.util.Platform;
 import ru.serce.jnrfuse.struct.*;
 import ru.serce.jnrfuse.utils.MountUtils;
 import ru.serce.jnrfuse.utils.SecurityUtils;
@@ -250,8 +251,11 @@ public abstract class AbstractFuseFS implements FuseFS {
 
         final String[] args = arg;
         try {
-            if (!Files.isDirectory(mountPoint)) {
-//                throw new FuseException("Mount point should be directory");
+            if (!Platform.IS_WINDOWS) {
+                // winfsp requires non-existing directory to be provided
+                if (!Files.isDirectory(mountPoint)) {
+                    throw new FuseException("Mount point should be directory");
+                }
             }
             if (SecurityUtils.canHandleShutdownHooks()) {
                 java.lang.Runtime.getRuntime().addShutdownHook(new Thread(this::umount));
