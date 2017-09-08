@@ -73,6 +73,8 @@ public class MemoryFS extends FuseStubFS {
         @Override
         protected void getattr(FileStat stat) {
             stat.st_mode.set(FileStat.S_IFDIR | 0777);
+            stat.st_uid.set(getContext().uid.get());
+            stat.st_gid.set(getContext().pid.get());
         }
 
         private synchronized void mkdir(String lastComponent) {
