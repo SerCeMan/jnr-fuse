@@ -23,7 +23,7 @@ public class BaseFsTest {
     protected Path tempPath() throws IOException {
         Path tmpDir;
         if(Platform.IS_WINDOWS) {
-            tmpDir = Paths.get("X:\\");
+            tmpDir = Paths.get("M:\\");
         } else {
             tmpDir = Files.createTempDirectory("memfuse");
         }
