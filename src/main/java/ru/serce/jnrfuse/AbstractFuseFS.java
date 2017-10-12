@@ -33,6 +33,7 @@ public abstract class AbstractFuseFS implements FuseFS {
     protected final FuseOperations fuseOperations;
     protected final AtomicBoolean mounted = new AtomicBoolean();
     protected Path mountPoint;
+    private volatile Pointer fusePointer;
 
     public AbstractFuseFS() {
         LibraryLoader<LibFuse> loader = LibraryLoader.create(LibFuse.class).failImmediately();
@@ -176,9 +177,13 @@ public abstract class AbstractFuseFS implements FuseFS {
         if (isImplemented("fsyncdir")) {
             fuseOperations.fsyncdir.set((path, fi) -> fuse.fsyncdir(path, FuseFileInfo.of(fi)));
         }
-        if (isImplemented("init")) {
-            fuseOperations.init.set(fuse::init);
-        }
+        fuseOperations.init.set(conn -> {
+            AbstractFuseFS.this.fusePointer = libFuse.fuse_get_context().fuse.get();
+            if (isImplemented("init")) {
+                return fuse.init(conn);
+            }
+            return null;
+        });
         if (isImplemented("destroy")) {
             fuseOperations.destroy.set(fuse::destroy);
         }
@@ -295,7 +300,14 @@ public abstract class AbstractFuseFS implements FuseFS {
         if (!mounted.get()) {
             return;
         }
-        MountUtils.umount(mountPoint);
+        if (Platform.IS_WINDOWS) {
+            Pointer fusePointer = this.fusePointer;
+            if (fusePointer != null) {
+                libFuse.fuse_exit(fusePointer);
+            }
+        } else {
+            MountUtils.umount(mountPoint);
+        }
         mounted.set(false);
     }
 
