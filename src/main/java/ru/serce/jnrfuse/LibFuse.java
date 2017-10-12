@@ -30,6 +30,18 @@ public interface LibFuse {
     FuseContext fuse_get_context();
 
     /**
+     * Flag session as terminated
+     *
+     * This function will cause any running event loops to exit on
+     * the next opportunity.
+     *
+     * NOTE(win): On WinFsp this function does unmount the filesystem
+     *
+     * @param fuse the FUSE handle
+     */
+    void fuse_exit(Pointer fuse);
+
+    /**
      * Main function of FUSE.
      * <p>
      * This function does the following:
