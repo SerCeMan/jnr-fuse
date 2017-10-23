@@ -1062,13 +1062,6 @@ public class ErrorCodes {
     public static int ENOTSUP() {
         return 45;
     }
-
-    /**
-     * Search permission is denied for a component of path or the attribute is not allowed to be read (e.g. an ACL prohibits reading the attributes of this file)
-     */
-    public static int EACCES() {
-        return Errno.EACCES.intValue();
-    }
     
     private ErrorCodes() {
     }
