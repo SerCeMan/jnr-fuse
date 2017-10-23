@@ -1049,6 +1049,20 @@ public class ErrorCodes {
         return 54;
     }
 
+    /**
+     * The extended attribute does not exist
+     */
+    public static int ENOATTR() {
+        return 93;
+    }
+    
+    /**
+     * The file system does not support extended attributes or has the feature disabled
+     */
+    public static int ENOTSUP() {
+        return 45;
+    }
+    
     private ErrorCodes() {
     }
 }
