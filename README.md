@@ -61,4 +61,8 @@ See [blog article about the implementation](http://serce.me/posts/22-06-2015-jnr
 | MacOS (via [osxfuse](https://osxfuse.github.io/))             | x64 | x86  |
 | Windows (via [winfsp](https://github.com/billziss-gh/winfsp/))| x64 | n/a  |
 
+## Installation and troubleshooting
+
+See [instructions](https://github.com/SerCeMan/jnr-fuse/blob/master/INSTALLATION.md).
+
 
