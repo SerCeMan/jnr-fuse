@@ -1,7 +1,6 @@
 package ru.serce.jnrfuse.struct;
 
 
-import jnr.posix.util.Platform;
 import org.junit.Test;
 import ru.serce.jnrfuse.examples.MemoryFS;
 
@@ -18,11 +17,6 @@ import static org.junit.Assert.*;
 public class MemoryFsTest extends BaseFsTest {
     @Test
     public void testReadWrite() throws Exception {
-        if (Platform.IS_WINDOWS) {
-            // TODO: setup appveyor properly
-            return;
-        }
-
         MemoryFS stub = new MemoryFS();
 
         Path tmpDir = tempPath();

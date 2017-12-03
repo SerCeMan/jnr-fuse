@@ -16,7 +16,10 @@ public class HelloFuseTest extends BaseFsTest {
     @Test
     public void testReadHello() throws Exception {
         if (Platform.IS_WINDOWS) {
-            // TODO: setup appveyor properly
+            // There is a winfsp speciality due to which the FS can't be mounted, unmounted, and then mounted again
+            // https://github.com/billziss-gh/cgofuse/issues/21#issuecomment-345307900
+            // Therefore only one mounting test test is currently enabled. Given that HelloFS is not as valuable as
+            // MemoryFS it is disabled.
             return;
         }
         HelloFuse stub = new HelloFuse();
