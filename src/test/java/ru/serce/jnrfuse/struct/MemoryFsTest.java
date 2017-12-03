@@ -1,7 +1,6 @@
 package ru.serce.jnrfuse.struct;
 
 
-import jnr.posix.util.Platform;
 import org.junit.Test;
 import ru.serce.jnrfuse.examples.MemoryFS;
 

@@ -17,6 +17,8 @@ public class HelloFuseTest extends BaseFsTest {
     public void testReadHello() throws Exception {
         if (Platform.IS_WINDOWS) {
             // TODO: setup appveyor properly
+            // There is a bug due to which the FS can't be mounted, unmounted, and then again mounted on WinFSP
+            // therefore only one  mounting test test is currently enabled
             return;
         }
         HelloFuse stub = new HelloFuse();
