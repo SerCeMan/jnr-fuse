@@ -5,6 +5,8 @@ install:
   - choco install winfsp
 
 build_script:
+  # UTF-8 encoding is required for jnr to work correctly
+  - set JAVA_OPTS="-Dfile.encoding=UTF-8"
   - gradlew.bat build --no-daemon
 
 test_script:
