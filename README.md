@@ -51,7 +51,7 @@ See [some examples](https://github.com/SerCeMan/jnr-fuse/tree/master/src/main/ja
 See [blog article about the implementation](http://serce.me/posts/22-06-2015-jnr-fuse/)
 
 ## Projects using jnr-fuse
-* [Tachyon](https://github.com/amplab/tachyon/tree/master/integration/fuse): Tachyon is a memory-centric distributed storage system
+* [Alluxio](https://github.com/Alluxio/alluxio/tree/master/integration/fuse): Alluxio is a memory-centric distributed storage system
 * [mux2fs](https://github.com/tfiskgul/mux2fs) Muxes subtitles into Matroska files as a FUSE filesystem
 
 ## Supported platforms
