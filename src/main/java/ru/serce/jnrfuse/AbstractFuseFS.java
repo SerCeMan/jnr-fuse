@@ -107,7 +107,7 @@ public abstract class AbstractFuseFS implements FuseFS {
     	InputStreamReader isr = null;
     	InputStream is = null;
     	try {
-    		Process process = Runtime.getRuntime().exec("reg query " + 
+    		Process process = java.lang.Runtime.getRuntime().exec("reg query " + 
                 '"'+ "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\WinFsp" + "\" /v " + "InstallDir");
     		is = process.getInputStream();
     		isr = new InputStreamReader(is);
