@@ -23,6 +23,12 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.regex.Pattern;
+
 public abstract class AbstractFuseFS implements FuseFS {
 
     private static final int TIMEOUT = 2000; // ms
@@ -61,9 +67,13 @@ public abstract class AbstractFuseFS implements FuseFS {
                 }
                 break;
             case WINDOWS:
-                String winFspPath = System.getProperty("jnrfuse.winfsp.path", "C:\\Program Files (x86)\\WinFsp\\bin\\winfsp-x64.dll");
-                libFuse = loader.load(winFspPath);
-                break;
+            	String winFspPath = System.getProperty("jnrfuse.winfsp.path");
+            	String defaultPath = "C:\\Program Files (x86)\\WinFsp\\bin\\winfsp-x64.dll";
+            	if(winFspPath == null) {
+            		winFspPath = (System.getProperty("os.arch").indexOf("64") != -1) ? getRegistryKey("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\WinFsp", "InstallDir", defaultPath) : getRegistryKey("HKEY_LOCAL_MACHINE\\SOFTWARE\\WinFsp", "InstallDir", defaultPath);
+            	}
+            	libFuse = loader.load(winFspPath);
+            	break;
             default:
                 // try fuse
                 try {
@@ -84,6 +94,54 @@ public abstract class AbstractFuseFS implements FuseFS {
         return libFuse.fuse_get_context();
     }
 
+    /**
+     * Used to retrieve the value of a key from the registrys path.
+     * @param path The path to the key
+     * @param key The key to retrieve the value of
+     * @param the default value to return if registry lookup failed
+     * @return Returns the value of the key or the default value if something failed. Reason for failure could be a security manager not allowing creation of subprocess or most likely a error in format of path and/or key input. Will also return the default value if no key was found.
+     */
+    private String getRegistryKey(String path, String key, String defaultValue) {
+    	String content = "";
+    	BufferedReader br = null;
+    	InputStreamReader isr = null;
+    	InputStream is = null;
+    	try {
+    		Process process = java.lang.Runtime.getRuntime().exec("reg query " + 
+                '"'+ "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\WinFsp" + "\" /v " + "InstallDir");
+    		is = process.getInputStream();
+    		isr = new InputStreamReader(is);
+	    	br = new BufferedReader(isr);
+	    	String line = null;
+	    	while((line = br.readLine()) != null) {
+	    		content += line;
+	    	}
+
+	    	return Pattern.compile("(.+)\\W+(\\w+)\\W+(\\w+)\\W+(.+)").matcher(content).group(4);
+    	} catch (SecurityException e) {
+    		//Runtime.getRuntime().exec
+    	} catch (IOException e) {
+    		//Runtime.getRuntime().exec
+    		//br.readLine
+    	} catch (NullPointerException e) {
+    		//Runtime.getRuntime().exec
+    	} catch (IllegalArgumentException e) {
+    		//Runtime.getRuntime().exec
+    		//Pattern.compile(...).matcher(...).group(4)
+    	} finally {
+    		try {
+    			br.close();
+    			isr.close();
+        		is.close();
+    		} catch (NullPointerException e) {
+    			//If br, isr or is never is initialized.
+    		} catch (IOException e) {
+    			//If someproblem arises with close operation
+    		}
+    	}
+    	return defaultValue;
+    }
+    
     private void init(FuseOperations fuseOperations) {
         notImplementedMethods = Arrays.stream(getClass().getMethods())
                 .filter(method -> method.getAnnotation(NotImplemented.class) != null)
