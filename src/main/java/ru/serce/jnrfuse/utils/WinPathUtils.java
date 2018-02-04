@@ -73,7 +73,7 @@ public class WinPathUtils {
         if (Platform.IS_64_BIT) {
             return WinPathUtils.getRegistryKey("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\WinFsp", "InstallDir");
         } else {
-            return WinPathUtils.getRegistryKey("H%$KEY_LOCAL_MACHINE\\SOFTWARE\\WinFsp", "InstallDir");
+            return WinPathUtils.getRegistryKey("HKEY_LOCAL_MACHINE\\SOFTWARE\\WinFsp", "InstallDir");
         }
     }
 
