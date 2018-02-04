@@ -27,7 +27,6 @@ public class WinPathUtils {
 
         // if path was set as a property, don't try any default value, just bail if not found
         String configuredPath = System.getProperty("jnrfuse.winfsp.path");
-
         if (configuredPath != null && !configuredPath.isEmpty()) {
             if (!libExists(configuredPath)) {
                 throw new FuseException("Configured winfsp library (jnrfuse.winfsp.path property) " +
