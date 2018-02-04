@@ -6,6 +6,7 @@ import ru.serce.jnrfuse.FuseException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,8 @@ public class WinPathUtils {
     /**
      * Best attempt to find the winfsp library
      *
-     * @throws FuseException if can't be found
      * @return winfsp installation paths or null if it can't be found
+     * @throws FuseException if can't be found
      */
     public static String getWinFspPath() {
         if (!Platform.IS_WINDOWS) {
@@ -61,14 +62,18 @@ public class WinPathUtils {
         if (keyParts.length < 4) {
             return null;
         }
-        return keyParts[3] + "\\bin\\winfsp-x64.dll";
+        String libraryPath = keyParts[3];
+        if (!libraryPath.endsWith("\\")) {
+            libraryPath += "\\";
+        }
+        return libraryPath + "bin\\winfsp-x64.dll";
     }
 
     private static String extractRegInstallRecord() {
-        if (Platform.IS_32_BIT) {
+        if (Platform.IS_64_BIT) {
             return WinPathUtils.getRegistryKey("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\WinFsp", "InstallDir");
         } else {
-            return WinPathUtils.getRegistryKey("HKEY_LOCAL_MACHINE\\SOFTWARE\\WinFsp", "InstallDir");
+            return WinPathUtils.getRegistryKey("H%$KEY_LOCAL_MACHINE\\SOFTWARE\\WinFsp", "InstallDir");
         }
     }
 
@@ -82,7 +87,7 @@ public class WinPathUtils {
     private static String getRegistryKey(String path, String key) {
         String reqCmd = String.format("reg query %s /v %s", path, key);
         try (BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(reqCmd).getInputStream()))) {
-            return br.lines().collect(Collectors.joining("\n"));
+            return br.lines().collect(Collectors.joining(""));
         } catch (Exception e) {
             // can't extract value for some reason
             return null;
@@ -90,6 +95,11 @@ public class WinPathUtils {
     }
 
     private static boolean libExists(String path) {
-        return path != null && !path.isEmpty() && Files.exists(Paths.get(path));
+        try {
+            return path != null && !path.isEmpty() && Files.exists(Paths.get(path));
+        } catch (InvalidPathException e) {
+            // registry might contain any kind of garbage
+            return false;
+        }
     }
 }
