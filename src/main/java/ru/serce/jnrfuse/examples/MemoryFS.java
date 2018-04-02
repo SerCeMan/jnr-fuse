@@ -74,7 +74,7 @@ public class MemoryFS extends FuseStubFS {
         protected void getattr(FileStat stat) {
             stat.st_mode.set(FileStat.S_IFDIR | 0777);
             stat.st_uid.set(getContext().uid.get());
-            stat.st_gid.set(getContext().pid.get());
+            stat.st_gid.set(getContext().gid.get());
         }
 
         private synchronized void mkdir(String lastComponent) {
@@ -118,7 +118,7 @@ public class MemoryFS extends FuseStubFS {
             stat.st_mode.set(FileStat.S_IFREG | 0777);
             stat.st_size.set(contents.capacity());
             stat.st_uid.set(getContext().uid.get());
-            stat.st_gid.set(getContext().pid.get());
+            stat.st_gid.set(getContext().gid.get());
         }
 
         private int read(Pointer buffer, long size, long offset) {
