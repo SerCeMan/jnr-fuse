@@ -6,12 +6,11 @@ matrix:
     - os: linux
       jdk: oraclejdk8
     - os: linux
-      sudo: false
       jdk: oraclejdk9
-      addons:
-        apt:
-          packages:
-            - oracle-java9-installer # Forces use of even newer JDK 9 build
+    - os: linux 
+      # jdk: oraclejdk10, it's not available on travis yet 
+      # https://github.com/junit-team/junit5/blob/master/.travis.yml
+      install: . ./install-jdk.sh -F 10 -L GPL
     - os: osx
       osx_image: xcode8
 
@@ -21,6 +20,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo modprobe fuse; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo chmod 666 /dev/fuse; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo chown root:$USER /etc/fuse.conf; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh; fi
 
 before_script:
   - uname -a
