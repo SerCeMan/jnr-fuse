@@ -190,13 +190,13 @@ public class FileStat extends Struct {
     public final Timespec st_atim;     /* Time of last access.  */
     public final Timespec st_mtim;     /* Time of last modification.  */
     public final Timespec st_ctim;     /* Time of last status change.  */
+    public final Timespec st_birthtime;/* Time of file creation(birth) */
 
     public final Signed64 __unused4;
     public final Signed64 __unused5;
     public final Signed64 __unused6;
 
     /** MacOS specific */
-    public final Timespec st_birthtime;     /* time of file creation(birth) */
     public final u_int32_t st_flags;
     public final u_int32_t st_gen;
 
