@@ -66,7 +66,7 @@ public abstract class AbstractFuseFS implements FuseFS {
                 try {
                 	libFuse = loader.load(winFspPath);
                 } catch(UnsatisfiedLinkError err) {
-                    new RuntimeException("Tried to load library 'winfsp*.dll' from your path; typically this fails when one doesn't have a fuse provider like winfsp installed', err);
+                    new RuntimeException("Tried to load library '"+winFspPath+"' from your path; typically this fails when one doesn't have a fuse provider like winfsp installed", err);
                 }
             	break;
             default:
