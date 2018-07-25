@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -30,8 +31,10 @@ public class MemoryFsTest extends BaseFsTest {
                 writer.print("test2");
             }
 
-            String text = Files.lines(fileOne.toPath()).collect(Collectors.joining());
-            assertEquals("file content doesn't match what was written", "test1test2", text);
+            try (Stream<String> lines = Files.lines(fileOne.toPath())) {
+                String text = lines.collect(Collectors.joining());
+                assertEquals("file content doesn't match what was written", "test1test2", text);
+            }
 
             assertTrue("file can't be deleted", fileOne.delete());
             assertFalse("file mustn't exist", fileOne.exists());
