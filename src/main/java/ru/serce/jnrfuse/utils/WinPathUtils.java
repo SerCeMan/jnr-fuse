@@ -66,7 +66,13 @@ public class WinPathUtils {
         if (!libraryPath.endsWith("\\")) {
             libraryPath += "\\";
         }
-        return libraryPath + "bin\\winfsp-x64.dll";
+
+        String fileName = "winfsp-x64.dll";
+        String osArch = System.getProperty("os.arch");
+        if (osArch.equalsIgnoreCase("x86")) {
+            fileName = "winfsp-x86.dll";
+        }
+        return libraryPath + "bin\\" + fileName;
     }
 
     private static String extractRegInstallRecord() {
