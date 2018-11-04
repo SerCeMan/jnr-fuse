@@ -11,6 +11,11 @@ repositories {
     jcenter()
 }
 
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
 idea {
     project {
         jdkName = '1.8'
