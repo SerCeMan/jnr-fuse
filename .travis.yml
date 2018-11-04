@@ -4,13 +4,13 @@ sudo: required
 matrix:
   include:
     - os: linux
-      jdk: oraclejdk8
+      jdk: openjdk8
     - os: linux
-      jdk: oraclejdk9
+      jdk: openjdk9
     - os: linux 
-      jdk: oraclejdk10
+      jdk: openjdk10
     - os: linux 
-      jdk: oraclejdk11
+      jdk: openjdk11
     - os: osx
       osx_image: xcode8
 
