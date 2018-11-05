@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'com.github.johnrengelman.shadow' version '2.0.2'
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
     id 'net.researchgate.release' version '2.4.0'
     id "com.jfrog.bintray" version "1.1"
     id 'maven'
@@ -10,6 +10,9 @@ plugins {
 repositories {
     jcenter()
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 idea {
     project {
