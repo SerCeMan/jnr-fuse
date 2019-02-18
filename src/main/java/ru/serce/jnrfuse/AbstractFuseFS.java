@@ -257,12 +257,6 @@ public abstract class AbstractFuseFS implements FuseFS {
 
         final String[] args = arg;
         try {
-            if (!Platform.IS_WINDOWS) {
-                // winfsp requires non-existing directory to be provided
-                if (!Files.isDirectory(mountPoint)) {
-                    throw new FuseException("Mount point should be directory");
-                }
-            }
             if (SecurityUtils.canHandleShutdownHooks()) {
                 java.lang.Runtime.getRuntime().addShutdownHook(new Thread(this::umount));
             }
