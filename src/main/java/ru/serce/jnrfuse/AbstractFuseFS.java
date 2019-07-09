@@ -64,7 +64,7 @@ public abstract class AbstractFuseFS implements FuseFS {
             case WINDOWS:
         		if (!System.getProperty("file.encoding").equals("UTF-8"))
         		{	
-        			System.out.println("UTF-8 encoding required! Current encoding: " + System.getProperty("file.encoding"));
+        			throw new FuseException("UTF-8 encoding required! Current encoding: " + System.getProperty("file.encoding"));
         		}
         		String winFspPath = WinPathUtils.getWinFspPath();
             	libFuse = loader.load(winFspPath);
