@@ -17,10 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -264,9 +261,15 @@ public abstract class AbstractFuseFS implements FuseFS {
             if (blocking) {
                 res = execMount(args);
             } else {
+                // Create a separate thread-pool to hold the mounted FUSE file system.
+                // Otherwise it will use the global ForkJoinPool which is capped at the number
+                // of CPUs on the system. This means we can't mount more file systems than that.
+                final int parallelism = 1;
+                ForkJoinPool forkJoinPool = new ForkJoinPool(parallelism);
+
                 try {
                     res = CompletableFuture
-                            .supplyAsync(() -> execMount(args))
+                            .supplyAsync(() -> execMount(args), forkJoinPool)
                             .get(TIMEOUT, TimeUnit.MILLISECONDS);
                 } catch (TimeoutException e) {
                     // ok
