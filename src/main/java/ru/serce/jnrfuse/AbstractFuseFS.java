@@ -261,16 +261,19 @@ public abstract class AbstractFuseFS implements FuseFS {
             if (blocking) {
                 res = execMount(args);
             } else {
-                // Create a separate thread-pool to hold the mounted FUSE file system.
-                // Otherwise it will use the global ForkJoinPool which is capped at the number
-                // of CPUs on the system. This means we can't mount more file systems than that.
-                final int parallelism = 1;
-                ForkJoinPool forkJoinPool = new ForkJoinPool(parallelism);
-
+                // Create a separate thread to hold the mounted FUSE file system.
+                CompletableFuture<Integer> mountResult = new CompletableFuture<>();
+                Thread mountThread = new Thread(() -> {
+                    try {
+                        mountResult.complete(execMount(args));
+                    } catch (Throwable t) {
+                        mountResult.completeExceptionally(t);
+                    }
+                }, "jnr-fuse-mount-thead");
+                mountThread.setDaemon(true);
+                mountThread.start();
                 try {
-                    res = CompletableFuture
-                            .supplyAsync(() -> execMount(args), forkJoinPool)
-                            .get(TIMEOUT, TimeUnit.MILLISECONDS);
+                    res = mountResult.get(TIMEOUT, TimeUnit.MILLISECONDS);
                 } catch (TimeoutException e) {
                     // ok
                     res = 0;
