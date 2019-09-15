@@ -269,7 +269,7 @@ public abstract class AbstractFuseFS implements FuseFS {
                     } catch (Throwable t) {
                         mountResult.completeExceptionally(t);
                     }
-                }, "jnr-fuse-mount-thead");
+                }, "jnr-fuse-mount-thread");
                 mountThread.setDaemon(true);
                 mountThread.start();
                 try {
