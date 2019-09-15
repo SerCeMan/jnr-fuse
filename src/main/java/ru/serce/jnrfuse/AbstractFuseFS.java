@@ -9,15 +9,17 @@ import jnr.ffi.provider.jffi.ClosureHelper;
 import jnr.posix.util.Platform;
 import ru.serce.jnrfuse.struct.*;
 import ru.serce.jnrfuse.utils.MountUtils;
-import ru.serce.jnrfuse.utils.WinPathUtils;
 import ru.serce.jnrfuse.utils.SecurityUtils;
+import ru.serce.jnrfuse.utils.WinPathUtils;
 
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -34,13 +36,9 @@ public abstract class AbstractFuseFS implements FuseFS {
     private volatile Pointer fusePointer;
 
     public AbstractFuseFS() {
-        LibraryLoader<LibFuse> loader = LibraryLoader.create(LibFuse.class).failImmediately();
         jnr.ffi.Platform p = jnr.ffi.Platform.getNativePlatform();
         LibFuse libFuse = null;
         switch (p.getOS()) {
-            case LINUX:
-                libFuse = loader.load("libfuse.so.2");
-                break;
             case DARWIN:
                 for (String library : osxFuseLibraries) {
                     try {
@@ -60,15 +58,17 @@ public abstract class AbstractFuseFS implements FuseFS {
                 break;
             case WINDOWS:
                 String winFspPath = WinPathUtils.getWinFspPath();
-            	libFuse = loader.load(winFspPath);
-            	break;
-            default:
-                // try fuse
+                libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load(winFspPath);
+                break;
+            case LINUX:
+            default: // Assume linux since we have no further OS evidence
                 try {
-                    // assume linux
-                    libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("libfuse.so.2");
-                } catch (Throwable e) {
+                    // Try loading library by going through the library mapping process, see j.l.System.mapLibraryName
                     libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("fuse");
+                } catch (Throwable e) {
+                    // Try loading the dynamic library directly which will end up calling dlopen directly, see
+                    // com.kenai.jffi.Foreign.dlopen
+                    libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load("libfuse.so.2");
                 }
         }
         this.libFuse = libFuse;
@@ -84,9 +84,9 @@ public abstract class AbstractFuseFS implements FuseFS {
 
     private void init(FuseOperations fuseOperations) {
         notImplementedMethods = Arrays.stream(getClass().getMethods())
-                .filter(method -> method.getAnnotation(NotImplemented.class) != null)
-                .map(Method::getName)
-                .collect(Collectors.toSet());
+            .filter(method -> method.getAnnotation(NotImplemented.class) != null)
+            .map(Method::getName)
+            .collect(Collectors.toSet());
 
         AbstractFuseFS fuse = this;
         if (isImplemented("getattr")) {
