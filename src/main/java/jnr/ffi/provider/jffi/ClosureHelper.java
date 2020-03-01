@@ -11,11 +11,12 @@ import ru.serce.jnrfuse.FuseException;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClosureHelper {
 
-    private final AsmClassLoader classLoader;
+    private final AsmClassLoader asmClassLoader;
     private final CompositeTypeMapper ctm;
     private final SimpleNativeContext ctx;
 
@@ -32,7 +33,7 @@ public class ClosureHelper {
             return result;
         }
         result = (FromNativeConverter<T, Pointer>) ClosureFromNativeConverter.
-                getInstance(Runtime.getSystemRuntime(), DefaultSignatureType.create(closureClass, (FromNativeContext) ctx), classLoader, ctm);
+                getInstance(Runtime.getSystemRuntime(), DefaultSignatureType.create(closureClass, (FromNativeContext) ctx), asmClassLoader, ctm);
         cache.putIfAbsent(closureClass, result);
         return result;
     }
@@ -49,10 +50,11 @@ public class ClosureHelper {
     private ClosureHelper() {
         try {
             ClosureManager closureManager = jnr.ffi.Runtime.getSystemRuntime().getClosureManager();
-            Field classLoaderField = NativeClosureManager.class.getDeclaredField("classLoader");
-            classLoaderField.setAccessible(true);
+            Field asmClassLoadersField = NativeClosureManager.class.getDeclaredField("asmClassLoaders");
+            asmClassLoadersField.setAccessible(true);
 
-            classLoader = (AsmClassLoader) classLoaderField.get(closureManager);
+            Map<ClassLoader, AsmClassLoader> asmClassLoaders = (Map<ClassLoader, AsmClassLoader>) asmClassLoadersField.get(closureManager);
+            asmClassLoader = asmClassLoaders.get(ClosureHelper.class.getClassLoader());
 
             Field typeMapperField = NativeClosureManager.class.getDeclaredField("typeMapper");
             typeMapperField.setAccessible(true);
