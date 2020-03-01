@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.serceman:jnr-fuse:0.5.3'
+    compile 'com.github.serceman:jnr-fuse:0.5.4'
 }
 ````
 ### Maven
@@ -38,7 +38,7 @@ dependencies {
     <dependency>
         <groupId>com.github.serceman</groupId>
         <artifactId>jnr-fuse</artifactId>
-        <version>0.5.3</version>
+        <version>0.5.4</version>
     </dependency>
 </dependencies>
 ```
