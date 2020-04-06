@@ -3,7 +3,7 @@ plugins {
     id 'idea'
     id 'com.github.johnrengelman.shadow' version '4.0.2'
     id 'net.researchgate.release' version '2.8.1'
-    id "com.jfrog.bintray" version "1.8.4"
+    id "com.jfrog.bintray" version "1.8.5"
     id 'maven'
 }
 
