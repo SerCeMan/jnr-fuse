@@ -30,7 +30,7 @@ dependencies {
     <repository>
         <id>central</id>
         <name>bintray</name>
-        <url>http://jcenter.bintray.com</url>
+        <url>https://dl.bintray.com/serce/maven</url>
     </repository>
 </repositories>
 
@@ -54,6 +54,7 @@ See [blog article about the implementation](http://serce.me/posts/22-06-2015-jnr
 * [Alluxio](https://github.com/Alluxio/alluxio/tree/master/integration/fuse): Alluxio is a memory-centric distributed storage system
 * [Cryptomator](https://github.com/cryptomator/cryptomator): A user-friendly encryption tool for cloud storage services
 * [mux2fs](https://github.com/tfiskgul/mux2fs): Muxes subtitles into Matroska files as a FUSE filesystem
+* [healthcare-api-dicom-fuse](https://github.com/GoogleCloudPlatform/healthcare-api-dicom-fuse): FUSE plugin for the Google Cloud Healthcare DICOM API
 
 ## Supported platforms
 | Supported platforms                                           |     |      |
