@@ -30,7 +30,7 @@ dependencies {
     <repository>
         <id>central</id>
         <name>bintray</name>
-        <url>https://dl.bintray.com/serce/maven</url>
+        <url>https://jcenter.bintray.com</url>
     </repository>
 </repositories>
 
