@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractFuseFS implements FuseFS {
 
     private static final int TIMEOUT = 2000; // ms
+    private static final String PROPERTY_WINLIB_PATH = "jnr-fuse.windows.libpath";
     private static final String[] osxFuseLibraries = {"fuse4x", "osxfuse", "macfuse", "fuse"};
 
     private Set<String> notImplementedMethods;
@@ -57,8 +58,9 @@ public abstract class AbstractFuseFS implements FuseFS {
                 }
                 break;
             case WINDOWS:
-                String winFspPath = WinPathUtils.getWinFspPath();
-                libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load(winFspPath);
+                //see if the property is set, otherwise use winfsp
+                String windowsLibPath = System.getProperty(PROPERTY_WINLIB_PATH, WinPathUtils.getWinFspPath());
+                libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load(windowsLibPath);
                 break;
             case LINUX:
             default: // Assume linux since we have no further OS evidence
