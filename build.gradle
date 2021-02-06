@@ -52,7 +52,6 @@ artifacts {
     archives shadowJar
 }
 
-
 dependencies {
     compile 'com.github.jnr:jnr-ffi:2.1.12'
     compile 'com.github.jnr:jnr-posix:3.0.54'
@@ -65,10 +64,6 @@ release {
     newVersionCommitMessage = '[jnr-fuse release] - '
     preTagCommitMessage = '[jnr-fuse release] - pre tag commit: '
     buildTasks = ['clean', 'assemble', 'publish']
-}
-
-signing {
-    sign publishing.publications.mavenJava
 }
 
 publishing {
@@ -129,4 +124,8 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
