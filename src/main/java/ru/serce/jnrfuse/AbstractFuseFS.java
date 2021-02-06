@@ -44,7 +44,11 @@ public abstract class AbstractFuseFS implements FuseFS {
                 for (String library : osxFuseLibraries) {
                     try {
                         // Regular FUSE-compatible fuse library
-                        libFuse = LibraryLoader.create(LibFuse.class).failImmediately().load(library);
+                        libFuse = LibraryLoader.create(LibFuse.class)
+                            .failImmediately()
+                            // adds user library search path which is not included by default
+                            .search("/usr/local/lib/")
+                            .load(library);
                         break;
                     } catch (Throwable e) {
                         // Carry on
