@@ -3,8 +3,8 @@ plugins {
     id 'idea'
     id 'com.github.johnrengelman.shadow' version '4.0.2'
     id 'net.researchgate.release' version '2.8.1'
-    id "com.jfrog.bintray" version "1.8.5"
     id 'maven'
+    id 'maven-publish'
     id 'signing'
 }
 
@@ -23,6 +23,7 @@ idea {
 }
 
 shadowJar {
+    classifier = 'shadow'
     relocate 'org.objectweb.asm', 'org.objectweb.asm.shaded'
 }
 
@@ -63,20 +64,69 @@ dependencies {
 release {
     newVersionCommitMessage = '[jnr-fuse release] - '
     preTagCommitMessage = '[jnr-fuse release] - pre tag commit: '
-    buildTasks = ['clean', 'assemble', 'bintrayUpload']
+    buildTasks = ['clean', 'assemble', 'publish']
 }
 
-bintray {
-    user = 'serce'
-    key = "${System.getenv('BINTRAY_KEY')}"
-    configurations = ['archives']
-    dryRun = false
-    publish = true
-    pkg {
-        repo = 'maven'
-        name = 'jnr-fuse'
-        version {
-            name = project.version
+signing {
+    sign publishing.publications.mavenJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'jnr-fuse'
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+            artifact shadowJar
+
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'jnr-fuse'
+                description = 'jnr-fuse is a FUSE implementation in java using Java Native Runtime (JNR).'
+                url = 'https://github.com/SerCeMan/jnr-fuse'
+                licenses {
+                    license {
+                        name = 'The MIT License (MIT)'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'SerCe'
+                        name = 'Sergey Tselovalnikov'
+                        email = 'sergeicelov@gmail.com'
+                    }
+                }
+
+                scm {
+                    url = 'https://github.com/SerCeMan/jnr-fuse'
+                    connection = 'scm:git:git@github.com:SerCeMan/jnr-fuse.git'
+                    developerConnection = 'scm:git:git@github.com:SerCeMan/jnr-fuse.git'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username System.getenv("SONATYPE_LOGIN")
+                password System.getenv("SONATYPE_PASSWORD")
+            }
         }
     }
 }
