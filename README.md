@@ -14,31 +14,22 @@ The main goal of the project is to provide an easy way to create a high-performa
 [Java Native Runtime](https://github.com/jnr/jnr-ffi) (JNR) is high-performance Java API for binding native libraries and native memory.
 
 ## Get it
+
+Prior to `0.5.5`, jnr-fuse was only available in [JCenter](https://bintray.com/serce/maven/jnr-fuse). Due to [sunsetting](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/) of JCenter, starting from `0.5.5` is available in maven central. 
+
 ### Gradle
 ```groovy
-repositories {
-    jcenter()
-}
-
 dependencies {
-    compile 'com.github.serceman:jnr-fuse:0.5.4'
+    compile 'com.github.serceman:jnr-fuse:0.5.5'
 }
 ````
 ### Maven
 ```xml
-<repositories>
-    <repository>
-        <id>central</id>
-        <name>bintray</name>
-        <url>https://jcenter.bintray.com</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
         <groupId>com.github.serceman</groupId>
         <artifactId>jnr-fuse</artifactId>
-        <version>0.5.4</version>
+        <version>0.5.5</version>
     </dependency>
 </dependencies>
 ```
