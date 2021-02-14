@@ -1,6 +1,6 @@
 jnr-fuse
 ==
-[![Build Status](https://travis-ci.org/SerCeMan/jnr-fuse.svg?branch=master)](https://travis-ci.org/SerCeMan/jnr-fuse)  [ ![Download](https://api.bintray.com/packages/serce/maven/jnr-fuse/images/download.svg) ](https://bintray.com/serce/maven/jnr-fuse/_latestVersion)  [![Join the chat at https://gitter.im/SerCeMan/jnr-fuse](https://badges.gitter.im/SerCeMan/jnr-fuse.svg)](https://gitter.im/SerCeMan/jnr-fuse?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/SerCeMan/jnr-fuse.svg?branch=master)](https://travis-ci.org/SerCeMan/jnr-fuse)  [![Join the chat at https://gitter.im/SerCeMan/jnr-fuse](https://badges.gitter.im/SerCeMan/jnr-fuse.svg)](https://gitter.im/SerCeMan/jnr-fuse?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 jnr-fuse is a FUSE implementation in java using Java Native Runtime (JNR). 
 
