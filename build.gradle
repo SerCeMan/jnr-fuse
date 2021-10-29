@@ -31,7 +31,7 @@ tasks.withType(Javadoc).configureEach {
 dependencies {
     api 'com.github.jnr:jnr-ffi:2.2.7'
     api 'com.github.jnr:jnr-posix:3.1.11'
-    api 'com.github.jnr:jnr-constants:0.10.2'
+    api 'com.github.jnr:jnr-constants:0.10.3'
 
     testImplementation 'junit:junit:4.13.2'
 }
