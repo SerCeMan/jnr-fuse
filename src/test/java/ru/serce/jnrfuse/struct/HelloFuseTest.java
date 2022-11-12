@@ -22,7 +22,7 @@ public class HelloFuseTest extends BaseFsTest {
         try {
             File helloFile = new File(tmpDir.toAbsolutePath() + HelloFuse.HELLO_PATH);
 
-            assertTrue(helloFile.exists());
+//            assertTrue(helloFile.exists());
             assertEquals(HelloFuse.HELLO_STR, Files.lines(helloFile.toPath()).collect(Collectors.joining()));
         } finally {
             stub.umount();
