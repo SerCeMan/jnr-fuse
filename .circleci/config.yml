@@ -31,6 +31,20 @@ jobs:
           paths:
             - ~/.gradle/caches
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
+  build-win:
+    machine:
+      image: windows-server-2019
+    steps:
+      - checkout
+      - run:
+          name: Env Setup
+          command: |
+            choco install winfsp
+      - run:
+          name: Run tests
+          command: |
+            ./gradlew.bat test
+            ./gradlew.bat clean build check
   build-macos:
     macos:
       xcode: 12.5.1
@@ -51,3 +65,4 @@ workflows:
     jobs:
       - build-linux
 #      - build-macos
+      - build-win
