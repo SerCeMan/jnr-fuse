@@ -17,12 +17,14 @@ public class BaseFsTest {
             stub.mount(tmpDir, false, true);
             latch.countDown();
         }).start();
-        latch.await(1, TimeUnit.MINUTES);
+        if (!latch.await(2, TimeUnit.MINUTES)) {
+            throw new RuntimeException("mount took too long");
+        }
     }
 
     protected Path tempPath() throws IOException {
         Path tmpDir;
-        if(Platform.IS_WINDOWS) {
+        if (Platform.IS_WINDOWS) {
             tmpDir = Paths.get("M:\\");
         } else {
             tmpDir = Files.createTempDirectory("memfuse");
