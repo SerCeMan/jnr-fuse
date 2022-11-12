@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build-linux:
     machine:
       image: ubuntu-2004:202010-01
     steps:
@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Env Setup
           command: |
-            lsb_release
+            lsb_release -a
             sudo apt-get update
             sudo apt-get install -qq pkg-config fuse
             sudo modprobe fuse
@@ -31,8 +31,35 @@ jobs:
           paths:
             - ~/.gradle/caches
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
+  build-macos:
+    macos:
+      xcode: 14.0.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - run:
+          name: Env Setup
+          command: |
+            brew cask install osxfuse
+      - run:
+          name: Run tests
+          command: |
+            ./gradlew test
+            ./gradlew clean build check
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
 workflows:
   version: 2
   workflow:
     jobs:
-      - build
+      - build-linux
+      - build-macos
