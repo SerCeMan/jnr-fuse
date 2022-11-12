@@ -39,7 +39,7 @@ jobs:
       - run:
           name: Env Setup
           command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask osxfuse
+            brew install --cask osxfuse
       - run:
           name: Run tests
           command: |
