@@ -33,7 +33,7 @@ jobs:
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
   build-win:
     machine:
-      image: windows-server-2019
+      image: windows-server-2019-vs2019:current
     steps:
       - checkout
       - run:
