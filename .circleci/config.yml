@@ -1,8 +1,8 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/openjdk:11.0.3-jdk-stretch
+  build-linux:
+    machine:
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - restore_cache:
@@ -10,12 +10,19 @@ jobs:
       - restore_cache:
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - run:
+          name: Env Setup
+          command: |
+            lsb_release -a
+            sudo apt-get update
+            sudo apt-get install -qq pkg-config fuse
+            sudo modprobe fuse
+            sudo chmod 666 /dev/fuse
+            sudo chown root:$USER /etc/fuse.conf
+      - run:
           name: Run tests
           command: |
             ./gradlew test
             ./gradlew clean build check
-            ./gradlew jacocoTestReport
-            bash <(curl -s https://codecov.io/bash)
       - save_cache:
           paths:
             - ~/.gradle/wrapper
@@ -24,8 +31,23 @@ jobs:
           paths:
             - ~/.gradle/caches
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
+  build-macos:
+    macos:
+      xcode: 12.5.1
+    steps:
+      - checkout
+      - run:
+          name: Env Setup
+          command: |
+            brew install --cask osxfuse
+      - run:
+          name: Run tests
+          command: |
+            ./gradlew test
+            ./gradlew clean build check
 workflows:
   version: 2
   workflow:
     jobs:
-      - build
+      - build-linux
+#      - build-macos
