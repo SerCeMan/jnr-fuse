@@ -36,27 +36,15 @@ jobs:
       xcode: 14.0.0
     steps:
       - checkout
-      - restore_cache:
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - restore_cache:
-          key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - run:
           name: Env Setup
           command: |
-            brew cask install osxfuse
+            brew install --cask osxfuse
       - run:
           name: Run tests
           command: |
             ./gradlew test
             ./gradlew clean build check
-      - save_cache:
-          paths:
-            - ~/.gradle/wrapper
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - save_cache:
-          paths:
-            - ~/.gradle/caches
-          key: v1-gradle-cache-{{ checksum "build.gradle" }}
 workflows:
   version: 2
   workflow:
