@@ -18,6 +18,7 @@ public class HelloFuseTest extends BaseFsTest {
 
         Path tmpDir = tempPath();
         blockingMount(stub, tmpDir);
+        Thread.sleep(5000L);
         try {
             File helloFile = new File(tmpDir.toAbsolutePath() + HelloFuse.HELLO_PATH);
 
