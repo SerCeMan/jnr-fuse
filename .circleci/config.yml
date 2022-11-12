@@ -65,5 +65,5 @@ workflows:
   workflow:
     jobs:
       - build-linux
-      - build-macos
-      - build-win
+#      - build-macos
+#      - build-win
