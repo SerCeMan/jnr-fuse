@@ -2,7 +2,8 @@ environment:
   JAVA_HOME: C:\Program Files\Java\jdk1.8.0
 
 install:
-  - choco install winfsp
+  # TODO: investigate failures on WinFsp 1.12
+  - choco install winfsp --version 1.11.22176
 
 build_script:
   # UTF-8 encoding is required for jnr to work correctly
