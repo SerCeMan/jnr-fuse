@@ -11,11 +11,17 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class BaseFsTest {
-    protected void blockingMount(FuseFS stub, Path tmpDir) throws InterruptedException {
+    protected void blockingMount(FuseFS fs, Path tmpDir) throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         new Thread(() -> {
-            stub.mount(tmpDir, false, true);
-            latch.countDown();
+            try {
+                fs.mount(tmpDir, false, true);
+                latch.countDown();
+            } catch (Throwable t) {
+                // print the error and return the unreleased latch
+                System.err.println("failed to mount the FS");
+                t.printStackTrace();
+            }
         }).start();
         if (!latch.await(2, TimeUnit.MINUTES)) {
             throw new RuntimeException("mount took too long");
