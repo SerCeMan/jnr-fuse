@@ -43,7 +43,7 @@ public class StructSizeTest {
                     pair(WINDOWS, platformSize(88, 88)), //
                     pair(DARWIN, platformSize(64, 64)))),
             pair(FileStat.class, asMap(
-                    pair(LINUX, platformSize(96, 144)), //
+                    pair(LINUX, platformSize(96, Platform.ARCH.equals("aarch64") ? 128 : 144)), //
                     pair(WINDOWS, platformSize(128, 128)), //
                     pair(DARWIN, platformSize(96, 144)))),
             pair(FuseFileInfo.class, asMap(
