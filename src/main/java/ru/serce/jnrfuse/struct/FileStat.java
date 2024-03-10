@@ -116,6 +116,8 @@ public class FileStat extends Struct {
             //graveyard
             pad1 = null;
             pad2 = null;
+            __pad1 = null;
+            __pad2 = null;
             __unused4 = null;
             __unused5 = null;
             __unused6 = null;
@@ -138,11 +140,39 @@ public class FileStat extends Struct {
             // graveyard
             pad1 = null;
             pad2 = null;
+            __pad1 = null;
+            __pad2 = null;
             __unused4 = null;
             __unused5 = null;
             __unused6 = null;
             st_flags = null;
             st_gen = null;
+        } else if (Platform.IS_LINUX && "aarch64".equals(Platform.ARCH)) {
+            st_dev = new dev_t();
+            st_ino = new ino_t();
+            st_mode = new mode_t();
+            st_nlink = new nlink_t();
+            st_uid = new uid_t();
+            st_gid = new gid_t();
+            st_rdev = new dev_t();
+            __pad1 = new Unsigned64();
+            st_size = new off_t();
+            st_blksize = new blksize_t();
+            __pad2 = new Unsigned32();
+            st_blocks = new blkcnt_t();
+            st_atim = inner(new Timespec(getRuntime()));
+            st_mtim = inner(new Timespec(getRuntime()));
+            st_ctim = inner(new Timespec(getRuntime()));
+            __unused4 = new Signed64();
+
+            //graveyard
+            pad1 = null;
+            pad2 = null;
+            st_birthtime = null;
+            st_flags = null;
+            st_gen = null;
+            __unused5 = null;
+            __unused6 = null;
         } else {
             st_dev = new dev_t();
             pad1 = IS_32_BIT ? new Unsigned16() : null;
@@ -172,11 +202,15 @@ public class FileStat extends Struct {
             st_birthtime = null;
             st_flags = null;
             st_gen = null;
+            __pad1 = null;
+            __pad2 = null;
         }
     }
 
     public final dev_t st_dev;      /* Device.  */
     private final Unsigned16 pad1;
+    private final Unsigned64 __pad1;
+    private final Unsigned32 __pad2;
     public final NumberField st_ino;         /* File serial number.	*/
     public final NumberField st_nlink;     /* Link count.  */
     public final NumberField st_mode;       /* File mode.  */
