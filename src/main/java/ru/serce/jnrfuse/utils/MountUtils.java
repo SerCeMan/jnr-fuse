@@ -16,7 +16,7 @@ public class MountUtils {
             new ProcessBuilder("fusermount", "-u", "-z", mountPath).start();
         } catch (IOException e) {
             try {
-                new ProcessBuilder("umount", mountPath).start().waitFor();
+                new ProcessBuilder("umount", "-f", mountPath).start().waitFor();
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
                 throw new FuseException("Unable to umount FS", e);
