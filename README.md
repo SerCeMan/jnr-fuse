@@ -20,7 +20,7 @@ Prior to `0.5.5`, jnr-fuse was only available in [JCenter](https://bintray.com/s
 ### Gradle
 ```groovy
 dependencies {
-    compile 'com.github.serceman:jnr-fuse:0.5.7'
+    compile 'com.github.serceman:jnr-fuse:0.5.8'
 }
 ````
 ### Maven
@@ -29,7 +29,7 @@ dependencies {
     <dependency>
         <groupId>com.github.serceman</groupId>
         <artifactId>jnr-fuse</artifactId>
-        <version>0.5.7</version>
+        <version>0.5.8</version>
     </dependency>
 </dependencies>
 ```
