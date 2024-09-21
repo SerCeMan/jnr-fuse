@@ -2,7 +2,7 @@ version: 2
 jobs:
   build-linux:
     machine:
-      image: ubuntu-2004:202010-01
+      image: ubuntu-2204:2024.05.1
     steps:
       - checkout
       - restore_cache:
@@ -15,6 +15,10 @@ jobs:
             lsb_release -a
             sudo apt-get update
             sudo apt-get install -qq pkg-config fuse
+            # Ensure that java 11 is used until gradle wrapper is updated
+            sudo apt-get install -y openjdk-11-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-11-openjdk-amd64/bin/javac
             sudo modprobe fuse
             sudo chmod 666 /dev/fuse
             sudo chown root:$USER /etc/fuse.conf
@@ -31,6 +35,44 @@ jobs:
           paths:
             - ~/.gradle/caches
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
+
+  build-linux-arm:
+    machine:
+      image: ubuntu-2204:2024.05.1
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-gradle-wrapper-arm-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-arm-{{ checksum "build.gradle" }}
+      - run:
+          name: Env Setup
+          command: |
+            lsb_release -a
+            sudo apt-get update
+            sudo apt-get install -qq pkg-config fuse
+            # Ensure that java 11 is used until gradle wrapper is updated
+            sudo apt-get install -y openjdk-11-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-arm64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-11-openjdk-arm64/bin/javac
+            sudo modprobe fuse
+            sudo chmod 666 /dev/fuse
+            sudo chown root:$USER /etc/fuse.conf
+      - run:
+          name: Run tests
+          command: |
+            ./gradlew test
+            ./gradlew clean build check
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-arm-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-arm-{{ checksum "build.gradle" }}
+
   build-macos:
     macos:
       xcode: 12.5.1
@@ -45,9 +87,11 @@ jobs:
           command: |
             ./gradlew test
             ./gradlew clean build check
+
 workflows:
   version: 2
   workflow:
     jobs:
       - build-linux
+      - build-linux-arm
 #      - build-macos
