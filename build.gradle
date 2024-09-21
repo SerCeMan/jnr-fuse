@@ -40,6 +40,9 @@ release {
     newVersionCommitMessage = '[jnr-fuse release] - '
     preTagCommitMessage = '[jnr-fuse release] - pre tag commit: '
     buildTasks = ['clean', 'assemble', 'publishToSonatype', 'closeAndReleaseSonatypeStagingRepository']
+    git {
+        requireBranch.set('master')
+    }
 }
 
 publishing {
